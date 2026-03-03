@@ -1,10 +1,9 @@
-import type { Ticket, User, Venue, TicketStatus, Purchase } from "@prisma/client";
+import type { Ticket, User, Venue, TicketStatus } from "@prisma/client";
 
 export type { Venue, TicketStatus };
 
 export type TicketWithSeller = Ticket & {
-  seller: Pick<User, "id" | "email" | "name" | "stripeAccountId" | "stripeOnboarded">;
-  purchase?: Purchase | null;
+  seller: Pick<User, "id" | "email" | "name">;
 };
 
 export type SafeUser = Omit<User, "password">;

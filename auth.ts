@@ -36,8 +36,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           id: user.id,
           email: user.email,
           name: user.name ?? undefined,
-          stripeAccountId: user.stripeAccountId ?? undefined,
-          stripeOnboarded: user.stripeOnboarded,
         };
       },
     }),
@@ -46,16 +44,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.stripeAccountId = (user as { stripeAccountId?: string }).stripeAccountId;
-        token.stripeOnboarded = (user as { stripeOnboarded?: boolean }).stripeOnboarded;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
-        session.user.stripeAccountId = token.stripeAccountId as string | undefined;
-        session.user.stripeOnboarded = token.stripeOnboarded as boolean | undefined;
       }
       return session;
     },

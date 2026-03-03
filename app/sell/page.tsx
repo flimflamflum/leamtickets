@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, AlertCircle, Info, X, ImageIcon } from "lucide-react";
+import { Upload, AlertCircle, X, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea, Select } from "@/components/ui/input";
@@ -123,18 +123,6 @@ export default function SellPage() {
         </p>
       </div>
 
-      {!session?.user?.stripeOnboarded && (
-        <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6">
-          <Info className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-          <div className="text-sm">
-            <p className="font-semibold text-amber-800">Connect Stripe to receive payouts</p>
-            <p className="text-amber-700 mt-0.5">
-              You need to connect a Stripe account before your tickets can be purchased.
-              You can list now and connect later from your dashboard.
-            </p>
-          </div>
-        </div>
-      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         {/* Event details */}

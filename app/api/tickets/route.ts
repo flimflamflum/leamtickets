@@ -29,16 +29,11 @@ export async function GET(req: NextRequest) {
 
     const orderBy = (() => {
       switch (sortBy) {
-        case "price_asc":
-          return { resalePrice: "asc" as const };
-        case "price_desc":
-          return { resalePrice: "desc" as const };
-        case "date_asc":
-          return { eventDate: "asc" as const };
-        case "date_desc":
-          return { eventDate: "desc" as const };
-        default:
-          return { createdAt: "desc" as const };
+        case "price_asc":   return { resalePrice: "asc" as const };
+        case "price_desc":  return { resalePrice: "desc" as const };
+        case "date_asc":    return { eventDate: "asc" as const };
+        case "date_desc":   return { eventDate: "desc" as const };
+        default:            return { createdAt: "desc" as const };
       }
     })();
 
@@ -47,13 +42,7 @@ export async function GET(req: NextRequest) {
       orderBy,
       include: {
         seller: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            stripeAccountId: true,
-            stripeOnboarded: true,
-          },
+          select: { id: true, email: true, name: true },
         },
       },
     });
@@ -98,13 +87,7 @@ export async function POST(req: NextRequest) {
       },
       include: {
         seller: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            stripeAccountId: true,
-            stripeOnboarded: true,
-          },
+          select: { id: true, email: true, name: true },
         },
       },
     });

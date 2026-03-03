@@ -2,10 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, Tag, ArrowLeft, User, Info } from "lucide-react";
+import { Calendar, Tag, ArrowLeft, User, Info, Mail } from "lucide-react";
 import { VenueBadge, Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
-import { BuyButton } from "./buy-button";
 import { PLATFORM_FEE_PERCENT, calculateFees } from "@/types";
 import type { TicketWithSeller } from "@/types";
 
@@ -33,15 +32,8 @@ export default async function TicketDetailPage({
     where: { id },
     include: {
       seller: {
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          stripeAccountId: true,
-          stripeOnboarded: true,
-        },
+        select: { id: true, email: true, name: true },
       },
-      purchase: true,
     },
   }) as TicketWithSeller | null;
 
@@ -49,7 +41,6 @@ export default async function TicketDetailPage({
 
   const fees = calculateFees(ticket.resalePrice);
   const isSold = ticket.status === "SOLD";
-  const canBuy = ticket.status === "AVAILABLE" && ticket.seller.stripeOnboarded;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
@@ -82,7 +73,7 @@ export default async function TicketDetailPage({
           </div>
         </div>
 
-        {/* Details + buy */}
+        {/* Details */}
         <div className="lg:col-span-2 flex flex-col gap-4">
           {/* Header */}
           <div>
@@ -119,53 +110,49 @@ export default async function TicketDetailPage({
 
           {/* Price card */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-            <div className="flex items-end justify-between mb-3">
-              <div>
-                <p className="text-3xl font-bold text-gray-900">{formatPrice(ticket.resalePrice)}</p>
-                {ticket.originalPrice !== ticket.resalePrice && (
-                  <p className="text-sm text-gray-400 line-through mt-0.5">
-                    Original: {formatPrice(ticket.originalPrice)}
-                  </p>
-                )}
-              </div>
-            </div>
+            <p className="text-3xl font-bold text-gray-900 mb-1">{formatPrice(ticket.resalePrice)}</p>
+            {ticket.originalPrice !== ticket.resalePrice && (
+              <p className="text-sm text-gray-400 line-through mb-3">
+                Original: {formatPrice(ticket.originalPrice)}
+              </p>
+            )}
 
             <div className="space-y-1.5 text-xs text-gray-500 border-t border-gray-100 pt-3 mb-4">
               <div className="flex justify-between">
                 <span>Ticket price</span>
                 <span>{formatPrice(fees.resalePrice)}</span>
               </div>
-              <div className="flex justify-between items-center gap-1">
-                <span className="flex items-center gap-1">
-                  Platform fee ({PLATFORM_FEE_PERCENT}%)
-                  <Info className="w-3 h-3" />
-                </span>
+              <div className="flex justify-between">
+                <span>Platform fee ({PLATFORM_FEE_PERCENT}%)</span>
                 <span>{formatPrice(fees.platformFee)}</span>
+              </div>
+              <div className="flex justify-between font-semibold text-gray-700 pt-1.5 border-t border-gray-100">
+                <span>Seller receives</span>
+                <span>{formatPrice(fees.sellerPayout)}</span>
               </div>
             </div>
 
-            {!canBuy && !isSold && (
-              <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 mb-3">
-                <Info className="w-3.5 h-3.5 text-amber-600 mt-0.5 flex-shrink-0" />
-                <p className="text-xs text-amber-700">
-                  The seller hasn&apos;t finished setting up payments yet. Check back soon.
-                </p>
+            {isSold ? (
+              <div className="text-center py-3 rounded-xl bg-gray-100 text-sm font-semibold text-gray-500">
+                Ticket sold
               </div>
+            ) : (
+              <a
+                href={`mailto:${ticket.seller.email}?subject=Interested in your ticket: ${ticket.eventName}&body=Hi, I'm interested in buying your ticket for ${ticket.eventName}. Is it still available?`}
+                className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 active:scale-[0.98] transition-all duration-200"
+              >
+                <Mail className="w-4 h-4" />
+                Contact seller
+              </a>
             )}
-
-            <BuyButton
-              ticketId={ticket.id}
-              disabled={!canBuy || isSold}
-              isSold={isSold}
-            />
           </div>
 
-          {/* Safety notice */}
+          {/* Notice */}
           <div className="flex items-start gap-2 text-xs text-gray-400">
             <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
             <p>
-              Payment is handled securely by Stripe. LeamTickets is not affiliated with
-              Smack, Neon, or the University of Warwick. Verify event details independently.
+              Online payments are coming soon. For now, contact the seller directly to arrange
+              payment. LeamTickets is not affiliated with Smack, Neon, or the University of Warwick.
             </p>
           </div>
         </div>

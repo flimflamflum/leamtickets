@@ -13,15 +13,8 @@ export async function GET(
       where: { id },
       include: {
         seller: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            stripeAccountId: true,
-            stripeOnboarded: true,
-          },
+          select: { id: true, email: true, name: true },
         },
-        purchase: true,
       },
     });
 
@@ -61,10 +54,7 @@ export async function DELETE(
     }
 
     if (ticket.status === "SOLD") {
-      return NextResponse.json(
-        { error: "Cannot delete a sold ticket" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Cannot delete a sold ticket" }, { status: 400 });
     }
 
     await prisma.ticket.update({

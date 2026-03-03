@@ -55,16 +55,9 @@ async function TicketGrid({
     where,
     orderBy,
     include: {
-      seller: {
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          stripeAccountId: true,
-          stripeOnboarded: true,
+        seller: {
+          select: { id: true, email: true, name: true },
         },
-      },
-      purchase: true,
     },
   }) as TicketWithSeller[];
 
