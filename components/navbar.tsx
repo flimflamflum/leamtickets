@@ -3,19 +3,34 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useTheme } from "next-themes";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles, ChevronDown, Sun, Moon } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const { data: session } = useSession();
+  const { resolvedTheme, setTheme } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) => pathname === href;
+  const isDark = resolvedTheme === "dark";
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleVenueFilter = (venue: string) => {
     router.push(`/?venue=${venue}`, { scroll: false });
@@ -82,7 +97,7 @@ export function Navbar() {
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary"
               )}
             >
-              Browse
+              Buy
             </Link>
             {session?.user ? (
               <>
@@ -97,31 +112,50 @@ export function Navbar() {
                 >
                   Sell a Ticket
                 </Link>
-                <Link
-                  href="/dashboard"
-                  className={cn(
-                    "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
-                    isActive("/dashboard")
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    onClick={() => setUserMenuOpen((prev) => !prev)}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
+                      "text-foreground hover:bg-secondary",
+                      "border border-transparent",
+                      userMenuOpen && "bg-secondary"
+                    )}
+                  >
+                    <span className="truncate max-w-[180px]">{session.user.email}</span>
+                    <ChevronDown className={cn("w-4 h-4 flex-shrink-0 transition-transform", userMenuOpen && "rotate-180")} />
+                  </button>
+                  {userMenuOpen && (
+                    <div className="absolute right-0 top-full mt-1 py-1 min-w-[200px] bg-card border border-border rounded-xl shadow-lg z-50">
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setUserMenuOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors",
+                          "text-foreground hover:bg-secondary",
+                          isActive("/dashboard") && "bg-primary/10 text-primary"
+                        )}
+                      >
+                        <LayoutDashboard className="w-4 h-4" />
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={() => { setTheme(isDark ? "light" : "dark"); setUserMenuOpen(false); }}
+                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors text-left"
+                      >
+                        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                        {isDark ? "Light mode" : "Dark mode"}
+                      </button>
+                      <button
+                        onClick={() => { setUserMenuOpen(false); signOut({ redirectTo: "/" }); }}
+                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Sign out
+                      </button>
+                    </div>
                   )}
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={() => signOut({ redirectTo: "/" })}
-                  className="group/btn px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 flex items-center gap-1.5 max-w-[150px] min-w-[100px]"
-                >
-                  <LogOut className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 group-hover/btn:scale-110" />
-                  <span className="relative inline-block min-w-0 flex-1 overflow-hidden">
-                    <span className="block truncate opacity-100 transition-opacity duration-200 group-hover/btn:opacity-0">
-                      {session.user.email}
-                    </span>
-                    <span className="absolute inset-0 flex items-center truncate opacity-0 transition-opacity duration-200 group-hover/btn:opacity-100">
-                      Sign out
-                    </span>
-                  </span>
-                </button>
+                </div>
               </>
             ) : (
               <>
@@ -137,15 +171,17 @@ export function Navbar() {
               </>
             )}
 
-            {/* Theme toggle */}
-            <div className="ml-2 pl-2 border-l border-border">
-              <ThemeToggle />
-            </div>
+            {/* Theme toggle - only when not logged in */}
+            {!session?.user && (
+              <div className="ml-2 pl-2 border-l border-border">
+                <ThemeToggle />
+              </div>
+            )}
           </nav>
 
           {/* Mobile hamburger */}
           <div className="md:hidden flex items-center gap-2">
-            <ThemeToggle />
+            {!session?.user && <ThemeToggle />}
             <button
               className="p-2 rounded-xl text-muted-foreground hover:bg-secondary transition-colors"
               onClick={() => setMobileOpen((prev) => !prev)}
@@ -182,7 +218,7 @@ export function Navbar() {
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary transition-colors"
           >
             <Sparkles className="w-4 h-4 text-muted-foreground" />
-            Browse Tickets
+            Buy Tickets
           </Link>
           {session?.user ? (
             <>
@@ -194,22 +230,31 @@ export function Navbar() {
                 <Plus className="w-4 h-4 text-muted-foreground" />
                 Sell a Ticket
               </Link>
-              <Link
-                href="/dashboard"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary transition-colors"
-              >
-                <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
-                Dashboard
-              </Link>
-              <button
-                onClick={() => { setMobileOpen(false); signOut({ redirectTo: "/" }); }}
-                title="Sign out"
-                className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
-              >
-                <LogOut className="w-4 h-4 flex-shrink-0" />
-                <span className="truncate">{session.user.email}</span>
-              </button>
+              <div className="border-t border-border/50 pt-2 mt-2">
+                <p className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{session.user.email}</p>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => { setTheme(isDark ? "light" : "dark"); setMobileOpen(false); }}
+                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary transition-colors text-left"
+                >
+                  {isDark ? <Sun className="w-4 h-4 text-muted-foreground" /> : <Moon className="w-4 h-4 text-muted-foreground" />}
+                  {isDark ? "Light mode" : "Dark mode"}
+                </button>
+                <button
+                  onClick={() => { setMobileOpen(false); signOut({ redirectTo: "/" }); }}
+                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
+                >
+                  <LogOut className="w-4 h-4 flex-shrink-0" />
+                  Sign out
+                </button>
+              </div>
             </>
           ) : (
             <>

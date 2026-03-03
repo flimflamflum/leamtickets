@@ -145,61 +145,66 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-tr from-cyan-500/5 to-transparent dark:from-cyan-500/10" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-border/50 mb-6">
-              <Zap className="w-4 h-4 text-purple-500 dark:text-purple-400" />
-              <span className="text-sm font-medium text-foreground">Student-to-student resale</span>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 lg:gap-12">
+            {/* Left: Badge, heading, description */}
+            <div className="lg:max-w-xl">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-border/50 mb-6">
+                <Zap className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+                <span className="text-sm font-medium text-foreground">Student-to-student resale</span>
+              </div>
+
+              {/* Main heading */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight mb-6">
+                Buy and Sell Tickets for{" "}
+                <span className="text-cyan-500">Neon</span>{" "}
+                and{" "}
+                <span className="text-purple-500">Smack</span>
+              </h1>
+
+              {/* Subheading */}
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                We all love Leamington spa, especially Smack and Neon👀👀 Unfortunately they almost always sell out which is why we built this marketplace where you can securely buy and sell tickets.
+              </p>
             </div>
 
-            {/* Main heading */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight mb-6">
-              Buy and Sell Tickets for{" "}
-              <span className="text-cyan-500">Neon</span>{" "}
-              and{" "}
-              <span className="text-purple-500">Smack</span>
-            </h1>
-
-            {/* Subheading */}
-            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl mx-auto">
-              Buy and sell tickets for Smack and Neon in Leamington Spa. 
-              No bots. No scalpers. Just Warwick students helping each other out.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/sell">
-                <Button size="lg" className="rounded-xl gap-2 px-8 shine-effect text-base">
-                  <Zap className="w-4 h-4" />
-                  Sell a Ticket
-                </Button>
-              </Link>
-              <Link href="#tickets">
-                <Button size="lg" variant="outline" className="rounded-xl px-8 text-base">
-                  Browse Tickets
-                </Button>
-              </Link>
-            </div>
-
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
-                </div>
-                <span>Secure platform</span>
+            {/* Right: Buttons and trust badges */}
+            <div className="flex flex-col items-center lg:items-end gap-6 shrink-0">
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/sell">
+                  <Button size="lg" className="rounded-xl gap-2 px-8 shine-effect text-base w-full sm:w-auto">
+                    <Zap className="w-4 h-4" />
+                    Sell a Ticket
+                  </Button>
+                </Link>
+                <Link href="#tickets">
+                  <Button size="lg" variant="outline" className="rounded-xl px-8 text-base w-full sm:w-auto">
+                    Browse Tickets
+                  </Button>
+                </Link>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                  <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+
+              {/* Trust badges */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-end gap-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span>Secure platform</span>
                 </div>
-                <span>Student verified</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                  <Ticket className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <span>Student verified</span>
                 </div>
-                <span>Instant transfer</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                    <Ticket className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <span>Instant transfer</span>
+                </div>
               </div>
             </div>
           </div>

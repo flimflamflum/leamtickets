@@ -105,6 +105,13 @@ export default function SellPage() {
         </p>
       </div>
 
+      <div className="mb-6 flex items-start gap-3 bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/30 dark:border-amber-500/40 rounded-xl px-4 py-3">
+        <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
+        <p className="text-sm text-foreground">
+          Do not sell anything that isn&apos;t an actual ticket that you don&apos;t intend to use. We know this seems tempting but if you try this you will not receive the money and will be banned.
+        </p>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         {/* Event details */}
         <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-4">

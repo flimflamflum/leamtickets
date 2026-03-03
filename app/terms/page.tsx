@@ -12,27 +12,27 @@ export default function TermsPage() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to LeamTickets
       </Link>
 
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Terms of Service</h1>
-      <p className="text-gray-500 text-sm mb-8">Last updated: March 2025</p>
+      <h1 className="text-3xl font-bold text-foreground mb-2">Terms of Service</h1>
+      <p className="text-muted-foreground text-sm mb-8">Last updated: March 2025</p>
 
-      <div className="prose prose-gray max-w-none space-y-6 text-sm leading-relaxed">
+      <div className="prose prose-gray dark:prose-invert max-w-none space-y-6 text-sm leading-relaxed">
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">1. Agreement</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">1. Agreement</h2>
+          <p className="text-foreground">
             By using LeamTickets (&quot;the Platform&quot;), you agree to these Terms of Service.
             If you do not agree, do not use the Platform.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">2. About LeamTickets</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">2. About LeamTickets</h2>
+          <p className="text-foreground">
             LeamTickets is an independent, student-run peer-to-peer ticket resale marketplace.
             We facilitate connections between buyers and sellers. <strong>We are not affiliated with,
             endorsed by, or connected to Smack, Neon, the University of Warwick, or any venue,
@@ -42,14 +42,14 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">3. No Liability for Scams or Fraud</h2>
-          <p className="text-gray-700 mb-2">
+          <h2 className="text-lg font-semibold text-foreground mb-2">3. No Liability for Scams or Fraud</h2>
+          <p className="text-foreground mb-2">
             <strong>LeamTickets is not liable for scams, fraud, counterfeit tickets, non-delivery,
             event cancellations, or any loss arising from transactions between users.</strong> All
             purchases and sales are at your own risk. We do not guarantee the authenticity,
             validity, or delivery of any ticket listed on the Platform.
           </p>
-          <p className="text-gray-700">
+          <p className="text-foreground">
             While we are not liable, we take user safety seriously. <strong>We will investigate all
             reported scams and fraudulent activity.</strong> If you believe you have been scammed,
             please contact us at leamtickets@gmail.com with details. We may take action against accounts involved in fraud,
@@ -58,9 +58,9 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">4. User Responsibilities</h2>
-          <p className="text-gray-700 mb-2">As a user, you agree to:</p>
-          <ul className="list-disc pl-6 space-y-1 text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">4. User Responsibilities</h2>
+          <p className="text-foreground mb-2">As a user, you agree to:</p>
+          <ul className="list-disc pl-6 space-y-1 text-foreground">
             <li>Provide accurate information when listing or claiming tickets</li>
             <li>Honour agreements made through the Platform</li>
             <li>Not list counterfeit, invalid, or fraudulent tickets</li>
@@ -71,8 +71,8 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Seller Payouts & Cashout</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">5. Seller Payouts & Cashout</h2>
+          <p className="text-foreground">
             Sellers can cash out their earnings <strong>48 hours after the event date listed</strong> on
             their ticket. This delay is in place to protect buyers from scams and to allow time for
             any disputes to be raised before funds are released. It helps ensure that buyers receive
@@ -81,9 +81,9 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Prohibited Conduct</h2>
-          <p className="text-gray-700 mb-2">You must not:</p>
-          <ul className="list-disc pl-6 space-y-1 text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">6. Prohibited Conduct</h2>
+          <p className="text-foreground mb-2">You must not:</p>
+          <ul className="list-disc pl-6 space-y-1 text-foreground">
             <li>List tickets you do not own or have the right to sell</li>
             <li>Engage in scalping, bot use, or automated listing</li>
             <li>Harass, threaten, or defraud other users</li>
@@ -94,8 +94,8 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Disclaimer of Warranties</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">7. Disclaimer of Warranties</h2>
+          <p className="text-foreground">
             The Platform is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
             express or implied. We do not warrant that the Platform will be uninterrupted, error-free,
             or free of viruses or harmful components.
@@ -103,8 +103,8 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">8. Limitation of Liability</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">8. Limitation of Liability</h2>
+          <p className="text-foreground">
             To the fullest extent permitted by law, LeamTickets, its operators, and affiliates
             shall not be liable for any indirect, incidental, special, consequential, or punitive
             damages, including but not limited to loss of profits, data, or goodwill, arising from
@@ -114,8 +114,8 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">9. Dispute Resolution</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">9. Dispute Resolution</h2>
+          <p className="text-foreground">
             Disputes between buyers and sellers are solely between those users. We encourage you to
             resolve issues directly. We may, at our discretion, provide assistance or mediation,
             but we are not obliged to do so and are not responsible for the outcome.
@@ -123,18 +123,18 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">10. Changes</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">10. Changes</h2>
+          <p className="text-foreground">
             We may update these Terms at any time. Continued use of the Platform after changes
             constitutes acceptance of the updated Terms.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">11. Contact</h2>
-          <p className="text-gray-700">
+          <h2 className="text-lg font-semibold text-foreground mb-2">11. Contact</h2>
+          <p className="text-foreground">
             For questions, scam reports, complaints, or support, contact us at{" "}
-            <a href="mailto:leamtickets@gmail.com" className="text-gray-900 font-medium underline hover:no-underline">
+            <a href="mailto:leamtickets@gmail.com" className="text-foreground font-medium underline hover:no-underline">
               leamtickets@gmail.com
             </a>
             . We aim to respond promptly and take appropriate action.
@@ -142,7 +142,7 @@ export default function TermsPage() {
         </section>
       </div>
 
-      <div className="mt-10 pt-6 border-t border-gray-200 space-y-4">
+      <div className="mt-10 pt-6 border-t border-border space-y-4">
         <div className="flex flex-wrap gap-3">
           <Link href="/">
             <Button variant="outline" size="sm">

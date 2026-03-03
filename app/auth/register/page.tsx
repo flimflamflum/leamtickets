@@ -66,7 +66,7 @@ function RegisterForm() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
       {serverError && (
         <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
           <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
@@ -109,7 +109,7 @@ function RegisterForm() {
           />
           <ul className="mt-2 space-y-1">
             {passwordRequirements.map((req) => (
-              <li key={req.label} className="flex items-center gap-1.5 text-xs text-gray-400">
+              <li key={req.label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <CheckCircle className="w-3 h-3" />
                 {req.label}
               </li>
@@ -130,29 +130,29 @@ export default function RegisterPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-gray-900 rounded-2xl flex items-center justify-center mb-4">
-            <Ticket className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-4">
+            <Ticket className="w-6 h-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create account</h1>
-          <p className="text-gray-500 text-sm mt-1">Start selling tickets in minutes</p>
+          <h1 className="text-2xl font-bold text-foreground">Create account</h1>
+          <p className="text-muted-foreground text-sm mt-1">Start selling tickets in minutes</p>
         </div>
 
         <Suspense fallback={
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 h-64 animate-pulse" />
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6 h-64 animate-pulse" />
         }>
           <RegisterForm />
         </Suspense>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-muted-foreground mt-4">
           Already have an account?{" "}
-          <Link href="/auth/login" className="font-semibold text-gray-900 hover:underline">
+          <Link href="/auth/login" className="font-semibold text-foreground hover:underline">
             Sign in
           </Link>
         </p>
 
-        <p className="text-center text-xs text-gray-400 mt-4 px-4">
+        <p className="text-center text-xs text-muted-foreground mt-4 px-4">
           By creating an account you agree to our{" "}
-          <Link href="/terms" className="underline hover:text-gray-600">Terms of Service</Link>.
+          <Link href="/terms" className="underline hover:text-foreground">Terms of Service</Link>.
         </p>
       </div>
     </div>

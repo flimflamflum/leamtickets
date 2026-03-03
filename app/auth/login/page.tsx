@@ -47,7 +47,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
       {serverError && (
         <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
           <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
@@ -96,22 +96,22 @@ export default function LoginPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-gray-900 rounded-2xl flex items-center justify-center mb-4">
-            <Ticket className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-4">
+            <Ticket className="w-6 h-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign in to your LeamTickets account</p>
+          <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
+          <p className="text-muted-foreground text-sm mt-1">Sign in to your LeamTickets account</p>
         </div>
 
         <Suspense fallback={
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 h-48 animate-pulse" />
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6 h-48 animate-pulse" />
         }>
           <LoginForm />
         </Suspense>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-muted-foreground mt-4">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="font-semibold text-gray-900 hover:underline">
+          <Link href="/auth/register" className="font-semibold text-foreground hover:underline">
             Create one
           </Link>
         </p>

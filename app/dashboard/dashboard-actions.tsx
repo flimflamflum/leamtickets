@@ -25,7 +25,7 @@ export function DashboardActions({ ticketId }: { ticketId: string }) {
   if (showConfirm) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-600">Remove listing?</span>
+        <span className="text-xs text-foreground">Remove listing?</span>
         <button
           onClick={handleDelete}
           disabled={isDeleting}
@@ -35,7 +35,7 @@ export function DashboardActions({ ticketId }: { ticketId: string }) {
         </button>
         <button
           onClick={() => setShowConfirm(false)}
-          className="text-xs text-gray-400 hover:text-gray-700"
+          className="text-xs text-muted-foreground hover:text-foreground"
         >
           Cancel
         </button>
@@ -46,7 +46,7 @@ export function DashboardActions({ ticketId }: { ticketId: string }) {
   return (
     <button
       onClick={() => setShowConfirm(true)}
-      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors"
+      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-red-500 transition-colors"
     >
       <Trash2 className="w-3 h-3" />
       Remove
