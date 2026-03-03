@@ -20,13 +20,21 @@ export default async function DashboardPage() {
       tickets: {
         orderBy: { createdAt: "desc" },
       },
-      ticketsBought: {
-        orderBy: { createdAt: "desc" },
-      },
     },
   });
 
   if (!user) redirect("/auth/login");
+
+  let ticketsBought: Awaited<ReturnType<typeof prisma.ticket.findMany>> = [];
+  try {
+    ticketsBought = await prisma.ticket.findMany({
+      where: { buyerId: session.user.id },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch {
+    // buyerId column may not exist if migration wasn't run on production
+    ticketsBought = [];
+  }
 
   const available = user.tickets.filter((t) => t.status === "AVAILABLE");
   const sold = user.tickets.filter((t) => t.status === "SOLD");
@@ -54,7 +62,7 @@ export default async function DashboardPage() {
         {[
           { label: "Active listings", value: available.length, sub: "available" },
           { label: "Tickets sold", value: sold.length, sub: "all time" },
-          { label: "Your tickets", value: user.ticketsBought.length, sub: "claimed" },
+          { label: "Your tickets", value: ticketsBought.length, sub: "claimed" },
           { label: "Total listings", value: user.tickets.length, sub: "created" },
         ].map(({ label, value, sub }) => (
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
@@ -66,7 +74,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Tabs: Your listings | Your tickets */}
-      <DashboardTabs listings={user.tickets} boughtTickets={user.ticketsBought} />
+      <DashboardTabs listings={user.tickets} boughtTickets={ticketsBought} />
     </div>
   );
 }
