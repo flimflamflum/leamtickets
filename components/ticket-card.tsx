@@ -23,6 +23,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          unoptimized={ticket.imageUrl.startsWith("data:")}
         />
         <div className="absolute top-3 left-3">
           <VenueBadge venue={ticket.venue} />
@@ -48,10 +49,9 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
         <div className="flex items-end justify-between">
           <div>
-            <p className="text-lg font-bold text-gray-900">{formatPrice(ticket.resalePrice)}</p>
-            {ticket.originalPrice !== ticket.resalePrice && (
-              <p className="text-xs text-gray-400 line-through">{formatPrice(ticket.originalPrice)}</p>
-            )}
+            <p className="text-lg font-bold text-gray-900">
+              {ticket.resalePrice > 0 ? formatPrice(ticket.resalePrice) : "Free"}
+            </p>
           </div>
           <span className="text-xs text-gray-400">
             by {ticket.seller.name ?? ticket.seller.email.split("@")[0]}

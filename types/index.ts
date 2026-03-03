@@ -33,7 +33,7 @@ export interface FeeBreakdown {
   platformFeePercent: number;
 }
 
-export const PLATFORM_FEE_PERCENT = 30;
+export const PLATFORM_FEE_PERCENT = 10;
 
 export function calculateFees(resalePrice: number): FeeBreakdown {
   const platformFee = Math.round(resalePrice * (PLATFORM_FEE_PERCENT / 100) * 100) / 100;

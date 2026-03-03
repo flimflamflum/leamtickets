@@ -19,30 +19,24 @@ export const loginSchema = z.object({
 });
 
 export const createTicketSchema = z.object({
-  venue: z.enum(["SMACK", "NEON"], {
-    error: "Please select a venue",
-  }),
+  venue: z.enum(["SMACK", "NEON"], { message: "Please select a venue" }),
   eventName: z
     .string()
     .min(2, "Event name must be at least 2 characters")
     .max(100, "Event name must be under 100 characters"),
   eventDate: z.string().refine((val) => {
     const date = new Date(val);
-    return !isNaN(date.getTime()) && date > new Date();
-  }, "Event date must be a valid future date"),
+    return !isNaN(date.getTime());
+  }, "Please enter a valid event date"),
   ticketType: z
     .string()
     .min(2, "Ticket type must be at least 2 characters")
     .max(50, "Ticket type must be under 50 characters"),
-  originalPrice: z
-    .number()
-    .positive("Original price must be positive")
-    .max(500, "Price seems too high — contact us if needed"),
   resalePrice: z
     .number()
-    .positive("Resale price must be positive")
+    .min(0, "Price must be 0 or more")
     .max(500, "Price seems too high — contact us if needed"),
-  imageUrl: z.string().url("Please upload a valid ticket image"),
+  imageUrl: z.string().min(1, "Please upload a ticket image"),
   description: z.string().max(500, "Description must be under 500 characters").optional(),
 });
 

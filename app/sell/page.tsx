@@ -9,16 +9,14 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea, Select } from "@/components/ui/input";
 import { createTicketSchema, type CreateTicketInput } from "@/lib/validations";
-import { formatPrice, venueLabel } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
 import { PLATFORM_FEE_PERCENT, calculateFees } from "@/types";
 
 export default function SellPage() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
 
   const {
     register,
@@ -30,13 +28,12 @@ export default function SellPage() {
     resolver: zodResolver(createTicketSchema),
     defaultValues: {
       venue: undefined,
-      originalPrice: undefined,
-      resalePrice: undefined,
+      resalePrice: 0,
     },
   });
 
   const resalePrice = watch("resalePrice");
-  const fees = resalePrice && resalePrice > 0 ? calculateFees(resalePrice) : null;
+  const fees = resalePrice !== undefined && resalePrice >= 0 ? calculateFees(resalePrice) : null;
 
   const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -53,54 +50,41 @@ export default function SellPage() {
       return;
     }
 
-    setImageFile(file);
     const reader = new FileReader();
-    reader.onloadend = () => setImagePreview(reader.result as string);
+    reader.onloadend = () => {
+      const dataUrl = reader.result as string;
+      setImageDataUrl(dataUrl);
+      setValue("imageUrl", dataUrl, { shouldValidate: true });
+    };
     reader.readAsDataURL(file);
-  }, []);
+  }, [setValue]);
 
   const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
-    setValue("imageUrl", "");
-  };
-
-  const uploadImage = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: formData });
-    if (!res.ok) throw new Error("Upload failed");
-    const { url } = await res.json();
-    return url;
+    setImageDataUrl(null);
+    setValue("imageUrl", "", { shouldValidate: true });
   };
 
   const onSubmit = async (data: CreateTicketInput) => {
     setServerError(null);
+    setUploadError(null);
 
-    if (!imageFile && !data.imageUrl) {
+    if (!data.imageUrl || data.imageUrl.length < 10) {
       setUploadError("Please upload a ticket image.");
       return;
     }
 
     try {
-      let imageUrl = data.imageUrl;
-
-      if (imageFile) {
-        setIsUploading(true);
-        imageUrl = await uploadImage(imageFile);
-        setIsUploading(false);
-      }
-
       const res = await fetch("/api/tickets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, imageUrl }),
+        body: JSON.stringify(data),
       });
 
       const json = await res.json();
 
       if (!res.ok) {
-        setServerError(json.error ?? "Failed to create listing.");
+        const msg = json.error ?? json.issues?.venue?.[0] ?? json.issues?.eventDate?.[0] ?? "Failed to create listing.";
+        setServerError(msg);
         return;
       }
 
@@ -108,7 +92,6 @@ export default function SellPage() {
       router.refresh();
     } catch {
       setServerError("Something went wrong. Please try again.");
-      setIsUploading(false);
     }
   };
 
@@ -117,10 +100,9 @@ export default function SellPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">List a ticket</h1>
         <p className="mt-1.5 text-gray-500">
-          Sell your ticket securely. The buyer pays upfront — you receive 70% via Stripe.
+          List your ticket for free. Buyers can claim it at no cost.
         </p>
       </div>
-
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         {/* Event details */}
@@ -132,11 +114,11 @@ export default function SellPage() {
             label="Venue"
             required
             error={errors.venue?.message}
+            placeholder="Select a venue"
             options={[
               { value: "SMACK", label: "Smack – Leamington Spa" },
               { value: "NEON", label: "Neon – Leamington Spa" },
             ]}
-            placeholder="Select a venue"
             {...register("venue")}
           />
 
@@ -170,43 +152,27 @@ export default function SellPage() {
 
         {/* Pricing */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900">Pricing</h2>
+          <h2 className="font-semibold text-gray-900">Price (optional)</h2>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              id="originalPrice"
-              type="number"
-              label="Original price (£)"
-              placeholder="0.00"
-              step="0.01"
-              min="0.01"
-              required
-              error={errors.originalPrice?.message}
-              {...register("originalPrice", { valueAsNumber: true })}
-            />
+          <Input
+            id="resalePrice"
+            type="number"
+            label="Resale price (£)"
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            error={errors.resalePrice?.message}
+            {...register("resalePrice", { valueAsNumber: true })}
+          />
 
-            <Input
-              id="resalePrice"
-              type="number"
-              label="Your resale price (£)"
-              placeholder="0.00"
-              step="0.01"
-              min="0.01"
-              required
-              error={errors.resalePrice?.message}
-              {...register("resalePrice", { valueAsNumber: true })}
-            />
-          </div>
-
-          {/* Fee breakdown */}
-          {fees && (
+          {fees && resalePrice > 0 && (
             <div className="bg-gray-50 rounded-xl border border-gray-100 p-4 space-y-2.5">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                 Fee breakdown
               </p>
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between text-gray-700">
-                  <span>Buyer pays</span>
+                  <span>Price</span>
                   <span className="font-medium">{formatPrice(fees.resalePrice)}</span>
                 </div>
                 <div className="flex justify-between text-gray-500">
@@ -227,18 +193,19 @@ export default function SellPage() {
           <div>
             <h2 className="font-semibold text-gray-900">Ticket image</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Upload a screenshot of your ticket. Make sure any personal details are visible for verification.
+              Upload a screenshot of your ticket (required).
             </p>
           </div>
 
-          {imagePreview ? (
+          {imageDataUrl ? (
             <div className="relative">
               <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-200">
                 <Image
-                  src={imagePreview}
+                  src={imageDataUrl}
                   alt="Ticket preview"
                   fill
                   className="object-contain bg-gray-50"
+                  unoptimized
                 />
               </div>
               <button
@@ -275,6 +242,9 @@ export default function SellPage() {
               {uploadError}
             </div>
           )}
+          {errors.imageUrl && (
+            <p className="text-sm text-red-500">{errors.imageUrl.message}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -301,15 +271,14 @@ export default function SellPage() {
           type="submit"
           size="lg"
           className="w-full"
-          isLoading={isSubmitting || isUploading}
+          isLoading={isSubmitting}
         >
           <Upload className="w-4 h-4" />
-          {isUploading ? "Uploading image…" : isSubmitting ? "Creating listing…" : "List ticket"}
+          {isSubmitting ? "Creating listing…" : "List ticket"}
         </Button>
 
         <p className="text-xs text-gray-400 text-center pb-4">
-          By listing a ticket you confirm you own it and accept our terms. LeamTickets is not
-          affiliated with any venue.
+          By listing a ticket you confirm you own it. LeamTickets is not affiliated with any venue.
         </p>
       </form>
     </div>

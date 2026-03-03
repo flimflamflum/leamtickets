@@ -33,13 +33,12 @@ model User {
 }
 
 model Ticket {
-  id            String       @id @default(cuid())
-  venue         Venue
-  eventName     String
-  eventDate     DateTime
-  ticketType    String
-  originalPrice Float
-  resalePrice   Float
+  id          String       @id @default(cuid())
+  venue       Venue
+  eventName   String
+  eventDate   DateTime
+  ticketType  String
+  resalePrice Float
   imageUrl      String
   description   String?
   status        TicketStatus @default(AVAILABLE)

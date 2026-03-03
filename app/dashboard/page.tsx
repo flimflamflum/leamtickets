@@ -99,6 +99,7 @@ export default async function DashboardPage() {
                     fill
                     className="object-cover"
                     sizes="80px"
+                    unoptimized={ticket.imageUrl.startsWith("data:")}
                   />
                 </div>
 
@@ -121,9 +122,8 @@ export default async function DashboardPage() {
                     </div>
 
                     <div className="text-right flex-shrink-0">
-                      <p className="font-bold text-gray-900 text-sm">{formatPrice(ticket.resalePrice)}</p>
-                      <p className="text-xs text-gray-400">
-                        orig. {formatPrice(ticket.originalPrice)}
+                      <p className="font-bold text-gray-900 text-sm">
+                        {ticket.resalePrice > 0 ? formatPrice(ticket.resalePrice) : "Free"}
                       </p>
                     </div>
                   </div>

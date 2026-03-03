@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { venue, eventName, eventDate, ticketType, originalPrice, resalePrice, imageUrl, description } =
+    const { venue, eventName, eventDate, ticketType, resalePrice, imageUrl, description } =
       parsed.data;
 
     const ticket = await prisma.ticket.create({
@@ -79,8 +79,7 @@ export async function POST(req: NextRequest) {
         eventName,
         eventDate: new Date(eventDate),
         ticketType,
-        originalPrice,
-        resalePrice,
+        resalePrice: resalePrice ?? 0,
         imageUrl,
         description: description ?? null,
         sellerId: session.user.id,
