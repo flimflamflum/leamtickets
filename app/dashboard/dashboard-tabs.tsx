@@ -47,13 +47,13 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
   return (
     <>
       {/* Tab switcher */}
-      <div className="flex gap-1 p-1 bg-gray-100 rounded-xl w-fit mb-6">
+      <div className="flex gap-1 p-1 bg-muted rounded-xl w-fit mb-6">
         <button
           onClick={() => setTab("listings")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             tab === "listings"
-              ? "bg-white text-gray-900 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           Your listings
@@ -62,8 +62,8 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
           onClick={() => setTab("tickets")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             tab === "tickets"
-              ? "bg-white text-gray-900 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           Your tickets
@@ -73,16 +73,16 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
       {/* Your listings */}
       {tab === "listings" && (
         <div className="space-y-4">
-          <h2 className="font-semibold text-gray-900 text-lg">Your listings</h2>
+          <h2 className="font-semibold text-foreground text-lg">Your listings</h2>
 
           {listings.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 flex flex-col items-center gap-4 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
-                <Ticket className="w-7 h-7 text-gray-400" />
+            <div className="bg-card rounded-2xl border border-border shadow-sm p-12 flex flex-col items-center gap-4 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center">
+                <Ticket className="w-7 h-7 text-muted-foreground" />
               </div>
               <div>
-                <p className="font-semibold text-gray-900">No listings yet</p>
-                <p className="text-gray-500 text-sm mt-1">Create your first listing to start selling.</p>
+                <p className="font-semibold text-foreground">No listings yet</p>
+                <p className="text-muted-foreground text-sm mt-1">Create your first listing to start selling.</p>
               </div>
               <Link href="/sell">
                 <Button variant="outline" size="sm">
@@ -96,9 +96,9 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
               {listings.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4"
+                  className="bg-card rounded-2xl border border-border shadow-sm p-4 flex gap-4"
                 >
-                  <div className="relative w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                  <div className="relative w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden bg-muted">
                     <Image
                       src={ticket.imageUrl}
                       alt={ticket.eventName}
@@ -117,16 +117,16 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                           {ticket.status === "AVAILABLE" && <Badge variant="available">Active</Badge>}
                           {ticket.status === "SOLD" && <Badge variant="sold">Sold</Badge>}
                         </div>
-                        <h3 className="font-semibold text-gray-900 text-sm mt-1.5 truncate">
+                        <h3 className="font-semibold text-foreground text-sm mt-1.5 truncate">
                           {ticket.eventName}
                         </h3>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {formatDateShort(ticket.eventDate)} · {ticket.ticketType}
                         </p>
                       </div>
 
                       <div className="text-right flex-shrink-0">
-                        <p className="font-bold text-gray-900 text-sm">
+                        <p className="font-bold text-foreground text-sm">
                           {ticket.resalePrice > 0 ? formatPrice(ticket.resalePrice) : "Free"}
                         </p>
                       </div>
@@ -135,7 +135,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                     <div className="flex items-center gap-2 mt-3">
                       <Link
                         href={`/tickets/${ticket.id}`}
-                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 transition-colors"
+                        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
                       >
                         <ExternalLink className="w-3 h-3" />
                         View listing
@@ -144,7 +144,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                         <DashboardActions ticketId={ticket.id} />
                       )}
                       {ticket.status === "SOLD" && (
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           Sold {formatDateShort(ticket.updatedAt)}
                         </span>
@@ -161,16 +161,16 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
       {/* Your tickets (bought) */}
       {tab === "tickets" && (
         <div className="space-y-4">
-          <h2 className="font-semibold text-gray-900 text-lg">Your tickets</h2>
+          <h2 className="font-semibold text-foreground text-lg">Your tickets</h2>
 
           {boughtTickets.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 flex flex-col items-center gap-4 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
-                <Ticket className="w-7 h-7 text-gray-400" />
+            <div className="bg-card rounded-2xl border border-border shadow-sm p-12 flex flex-col items-center gap-4 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center">
+                <Ticket className="w-7 h-7 text-muted-foreground" />
               </div>
               <div>
-                <p className="font-semibold text-gray-900">No tickets yet</p>
-                <p className="text-gray-500 text-sm mt-1">Tickets you claim will appear here.</p>
+                <p className="font-semibold text-foreground">No tickets yet</p>
+                <p className="text-muted-foreground text-sm mt-1">Tickets you claim will appear here.</p>
               </div>
               <Link href="/">
                 <Button variant="outline" size="sm">
@@ -183,10 +183,10 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
               {boughtTickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4"
+                  className="bg-card rounded-2xl border border-border shadow-sm p-4 flex gap-4"
                 >
                   {/* Show actual ticket image for bought tickets */}
-                  <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                  <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
                     <Image
                       src={ticket.imageUrl}
                       alt={ticket.eventName}
@@ -204,10 +204,10 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                           <VenueBadge venue={ticket.venue} />
                           <Badge variant="available">Yours</Badge>
                         </div>
-                        <h3 className="font-semibold text-gray-900 text-sm mt-1.5 truncate">
+                        <h3 className="font-semibold text-foreground text-sm mt-1.5 truncate">
                           {ticket.eventName}
                         </h3>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {formatDateShort(ticket.eventDate)} · {ticket.ticketType}
                         </p>
                       </div>
@@ -227,7 +227,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                     <div className="flex items-center gap-2 mt-3">
                       <Link
                         href={`/tickets/${ticket.id}`}
-                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 transition-colors"
+                        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
                       >
                         <ExternalLink className="w-3 h-3" />
                         View ticket

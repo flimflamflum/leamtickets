@@ -18,9 +18,11 @@ const VENUE_GRADIENTS: Record<string, string> = {
 
 interface TicketCardProps {
   ticket: TicketWithSeller;
+  currentUserId?: string | null;
 }
 
-export function TicketCard({ ticket }: TicketCardProps) {
+export function TicketCard({ ticket, currentUserId }: TicketCardProps) {
+  const isOwnListing = currentUserId != null && ticket.seller.id === currentUserId;
   const imageSrc = VENUE_IMAGES[ticket.venue] ?? "/smack1.jpeg";
   const isFree = ticket.resalePrice === 0;
 
@@ -101,7 +103,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
               {(ticket.seller.name ?? ticket.seller.email).charAt(0).toUpperCase()}
             </div>
             <span className="text-xs text-muted-foreground truncate max-w-[100px]">
-              {ticket.seller.name ?? ticket.seller.email.split("@")[0]}
+              {isOwnListing ? "Your listing" : (ticket.seller.name ?? ticket.seller.email.split("@")[0])}
             </span>
           </div>
 

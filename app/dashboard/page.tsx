@@ -46,8 +46,8 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
             Welcome back, {user.name ?? user.email.split("@")[0]}
           </p>
         </div>
@@ -67,17 +67,17 @@ export default async function DashboardPage() {
           { label: "Your tickets", value: ticketsBought.length, sub: "claimed" },
           { label: "Total money earnt", value: formatPrice(totalMoneyEarnt), sub: "from sold tickets", showCashout: true },
         ].map(({ label, value, sub, showCashout }) => (
-          <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-            <p className="text-xs text-gray-500 font-medium">{label}</p>
+          <div key={label} className="bg-card rounded-2xl border border-border shadow-sm p-4">
+            <p className="text-xs text-muted-foreground font-medium">{label}</p>
             <div className="flex items-center gap-2 mt-1">
-              <p className="text-2xl font-bold text-gray-900">{value}</p>
+              <p className="text-2xl font-bold text-foreground">{value}</p>
               {showCashout && (
                 <Button type="button" variant="outline" size="sm" className="active:scale-95">
                   Cashout
                 </Button>
               )}
             </div>
-            <p className="text-xs text-gray-400">{sub}</p>
+            <p className="text-xs text-muted-foreground">{sub}</p>
           </div>
         ))}
       </div>

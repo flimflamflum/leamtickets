@@ -6,7 +6,6 @@ import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import Image from "next/image";
 import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +20,9 @@ export function Navbar() {
   const handleVenueFilter = (venue: string) => {
     router.push(`/?venue=${venue}`, { scroll: false });
     setMobileOpen(false);
+    setTimeout(() => {
+      document.getElementById("tickets")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 300);
   };
 
   return (
@@ -34,7 +36,6 @@ export function Navbar() {
               href="/"
               className="flex items-center gap-2.5 font-bold text-foreground hover:opacity-80 transition-opacity"
             >
-              <Image src="/logo1.png" alt="LeamTickets" width={36} height={36} className="rounded-xl object-contain" />
               <span className="text-lg hidden sm:block">LeamTickets</span>
             </Link>
 
@@ -109,10 +110,11 @@ export function Navbar() {
                 </Link>
                 <button
                   onClick={() => signOut({ redirectTo: "/" })}
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 flex items-center gap-1.5"
+                  title="Sign out"
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 flex items-center gap-1.5 max-w-[150px] truncate"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Sign out
+                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{session.user.email}</span>
                 </button>
               </>
             ) : (
@@ -196,10 +198,11 @@ export function Navbar() {
               </Link>
               <button
                 onClick={() => { setMobileOpen(false); signOut({ redirectTo: "/" }); }}
+                title="Sign out"
                 className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
               >
-                <LogOut className="w-4 h-4" />
-                Sign out
+                <LogOut className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{session.user.email}</span>
               </button>
             </>
           ) : (

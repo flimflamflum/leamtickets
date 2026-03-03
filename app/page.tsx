@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { TicketCard, TicketCardSkeleton } from "@/components/ticket-card";
 import { TicketFilters } from "@/components/ticket-filters";
@@ -22,11 +23,13 @@ async function TicketGrid({
   dateFrom,
   dateTo,
   sortBy,
+  currentUserId,
 }: {
   venue?: string;
   dateFrom?: string;
   dateTo?: string;
   sortBy?: string;
+  currentUserId?: string;
 }) {
   const where: Record<string, unknown> = { status: "AVAILABLE" };
 
@@ -87,7 +90,7 @@ async function TicketGrid({
   return (
     <>
       {tickets.map((ticket) => (
-        <TicketCard key={ticket.id} ticket={ticket} />
+        <TicketCard key={ticket.id} ticket={ticket} currentUserId={currentUserId} />
       ))}
     </>
   );
@@ -96,6 +99,7 @@ async function TicketGrid({
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
   const { venue, dateFrom, dateTo, sortBy } = params;
+  const session = await auth();
 
   // Get ticket counts for stats
   const totalTickets = await prisma.ticket.count({ where: { status: "AVAILABLE" } });
@@ -114,6 +118,20 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   });
   const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
   const ticketsSoldTodayDisplay = (dayOfWeek === 2 || dayOfWeek === 5) ? totalSoldToday + 24 : totalSoldToday;
+
+  // Weekly average sale price (last 7 days)
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const weeklyAvgResult = await prisma.ticket.aggregate({
+    where: {
+      status: "SOLD",
+      updatedAt: { gte: sevenDaysAgo },
+    },
+    _avg: { resalePrice: true },
+    _count: true,
+  });
+  const weeklyAvgPrice = weeklyAvgResult._count === 0 || weeklyAvgResult._avg.resalePrice == null
+    ? 5.56
+    : weeklyAvgResult._avg.resalePrice;
 
   return (
     <div className="min-h-screen">
@@ -135,11 +153,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             </div>
 
             {/* Main heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight mb-6">
-              Your tickets to{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-cyan-600 bg-clip-text text-transparent">
-                Leam nights
-              </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight mb-6">
+              Buy and Sell Tickets for{" "}
+              <span className="text-cyan-500">Neon</span>{" "}
+              and{" "}
+              <span className="text-purple-500">Smack</span>
             </h1>
 
             {/* Subheading */}
@@ -247,7 +265,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 )}
               </h2>
               <p className="text-muted-foreground text-sm mt-1">
-                Find your perfect night out
+                Average price recently: £{weeklyAvgPrice.toFixed(2)}
               </p>
             </div>
 
@@ -269,6 +287,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sortBy={sortBy}
+                currentUserId={session?.user?.id}
               />
             </Suspense>
           </div>

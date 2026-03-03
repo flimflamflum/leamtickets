@@ -72,6 +72,7 @@ export default async function TicketDetailPage({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <VenueBadge venue={ticket.venue} />
+              {isSeller && <Badge variant="default">Your listing</Badge>}
               {isSold && <Badge variant="sold">Claimed</Badge>}
             </div>
             <h1 className="text-2xl font-bold text-foreground">{ticket.eventName}</h1>
@@ -94,7 +95,7 @@ export default async function TicketDetailPage({
               <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
                 <User className="w-4 h-4 text-muted-foreground" />
               </div>
-              <span>Listed by {ticket.seller.name ?? ticket.seller.email.split("@")[0]}</span>
+              <span>{isSeller ? "Your listing" : `Listed by ${ticket.seller.name ?? ticket.seller.email.split("@")[0]}`}</span>
             </div>
           </div>
 

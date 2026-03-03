@@ -99,16 +99,16 @@ export default function SellPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">List a ticket</h1>
-        <p className="mt-1.5 text-gray-500">
+        <h1 className="text-3xl font-bold text-foreground">List a ticket</h1>
+        <p className="mt-1.5 text-muted-foreground">
           List your ticket for free. Buyers can claim it at no cost.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         {/* Event details */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900">Event details</h2>
+        <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-4">
+          <h2 className="font-semibold text-foreground">Event details</h2>
 
           <Select
             id="venue"
@@ -152,8 +152,8 @@ export default function SellPage() {
         </div>
 
         {/* Pricing */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900">Price (optional)</h2>
+        <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-4">
+          <h2 className="font-semibold text-foreground">Price (optional)</h2>
 
           <Input
             id="resalePrice"
@@ -167,22 +167,22 @@ export default function SellPage() {
           />
 
           {fees && resalePrice > 0 && (
-            <div className="bg-gray-50 rounded-xl border border-gray-100 p-4 space-y-2.5">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+            <div className="bg-muted rounded-xl border border-border p-4 space-y-2.5">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 Fee breakdown
               </p>
               <div className="space-y-1.5 text-sm">
-                <div className="flex justify-between text-gray-700">
+                <div className="flex justify-between text-foreground">
                   <span>Price</span>
                   <span className="font-medium">{formatPrice(fees.resalePrice)}</span>
                 </div>
-                <div className="flex justify-between text-gray-500">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Platform fee ({PLATFORM_FEE_PERCENT}%)</span>
-                  <span className="text-red-500">−{formatPrice(fees.platformFee)}</span>
+                  <span className="text-destructive">−{formatPrice(fees.platformFee)}</span>
                 </div>
-                <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-200">
+                <div className="flex justify-between font-bold text-foreground pt-2 border-t border-border">
                   <span>You receive</span>
-                  <span className="text-green-600">{formatPrice(fees.sellerPayout)}</span>
+                  <span className="text-green-600 dark:text-green-400">{formatPrice(fees.sellerPayout)}</span>
                 </div>
               </div>
             </div>
@@ -190,43 +190,43 @@ export default function SellPage() {
         </div>
 
         {/* Ticket image */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-4">
           <div>
-            <h2 className="font-semibold text-gray-900">Ticket image</h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <h2 className="font-semibold text-foreground">Ticket image</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
               Upload a screenshot of your ticket (required).
             </p>
           </div>
 
           {imageDataUrl ? (
             <div className="relative">
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-200">
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-border">
                 <Image
                   src={imageDataUrl}
                   alt="Ticket preview"
                   fill
-                  className="object-contain bg-gray-50"
+                  className="object-contain bg-muted"
                   unoptimized
                 />
               </div>
               <button
                 type="button"
                 onClick={removeImage}
-                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-gray-900/80 text-white flex items-center justify-center hover:bg-gray-900 transition-colors"
+                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-foreground/80 text-background flex items-center justify-center hover:bg-foreground transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
           ) : (
-            <label className="flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 rounded-xl p-8 cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-colors group">
-              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                <ImageIcon className="w-5 h-5 text-gray-500" />
+            <label className="flex flex-col items-center gap-3 border-2 border-dashed border-border rounded-xl p-8 cursor-pointer hover:border-primary/50 hover:bg-muted/50 transition-colors group">
+              <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center group-hover:bg-muted-foreground/20 transition-colors">
+                <ImageIcon className="w-5 h-5 text-muted-foreground" />
               </div>
               <div className="text-center">
-                <p className="text-sm font-medium text-gray-700">
-                  <span className="text-gray-900 underline underline-offset-2">Upload image</span> or drag and drop
+                <p className="text-sm font-medium text-muted-foreground">
+                  <span className="text-foreground underline underline-offset-2">Upload image</span> or drag and drop
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">JPG, PNG, WebP up to 4MB</p>
+                <p className="text-xs text-muted-foreground/70 mt-0.5">JPG, PNG, WebP up to 4MB</p>
               </div>
               <input
                 type="file"
@@ -238,18 +238,18 @@ export default function SellPage() {
           )}
 
           {uploadError && (
-            <div className="flex items-center gap-1.5 text-sm text-red-500">
+            <div className="flex items-center gap-1.5 text-sm text-destructive">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               {uploadError}
             </div>
           )}
           {errors.imageUrl && (
-            <p className="text-sm text-red-500">{errors.imageUrl.message}</p>
+            <p className="text-sm text-destructive">{errors.imageUrl.message}</p>
           )}
         </div>
 
         {/* Description */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
           <Textarea
             id="description"
             label="Description (optional)"
@@ -262,9 +262,9 @@ export default function SellPage() {
         </div>
 
         {serverError && (
-          <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-            <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-            <p className="text-sm text-red-700">{serverError}</p>
+          <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3">
+            <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-destructive">{serverError}</p>
           </div>
         )}
 
@@ -278,9 +278,9 @@ export default function SellPage() {
           {isSubmitting ? "Creating listing…" : "List ticket"}
         </Button>
 
-        <p className="text-xs text-gray-400 text-center pb-4">
+        <p className="text-xs text-muted-foreground text-center pb-4">
           By listing a ticket you confirm you own it and agree to our{" "}
-          <Link href="/terms" className="underline hover:text-gray-600">Terms of Service</Link>.
+          <Link href="/terms" className="underline hover:text-foreground">Terms of Service</Link>.
         </p>
       </form>
     </div>
