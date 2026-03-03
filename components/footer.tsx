@@ -17,6 +17,7 @@ export function Footer() {
             <Link href="/" className="hover:text-gray-900 transition-colors">Browse</Link>
             <Link href="/sell" className="hover:text-gray-900 transition-colors">Sell a Ticket</Link>
             <Link href="/auth/login" className="hover:text-gray-900 transition-colors">Log in</Link>
+            <Link href="/terms" className="hover:text-gray-900 transition-colors">Terms of Service</Link>
           </nav>
         </div>
 
@@ -24,8 +25,8 @@ export function Footer() {
           <p className="text-xs text-gray-400 leading-relaxed max-w-2xl">
             <strong className="text-gray-500">Disclaimer:</strong> LeamTickets is an independent, student-run resale
             marketplace. It is not affiliated with, endorsed by, or connected to Smack, Neon, the University of
-            Warwick, or any venue or organisation. All ticket sales are between private individuals. Buyers should
-            verify event details independently. Use at your own risk.
+            Warwick, or any venue or organisation. By using this site you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-gray-600 transition-colors">Terms of Service</Link>.
           </p>
           <p className="text-xs text-gray-400 mt-2">
             &copy; {new Date().getFullYear()} LeamTickets. All rights reserved.

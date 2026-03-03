@@ -57,9 +57,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Cannot delete a sold ticket" }, { status: 400 });
     }
 
-    await prisma.ticket.update({
+    await prisma.ticket.delete({
       where: { id },
-      data: { status: "CANCELLED" },
     });
 
     return NextResponse.json({ success: true });

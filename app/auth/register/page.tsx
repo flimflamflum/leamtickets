@@ -151,8 +151,8 @@ export default function RegisterPage() {
         </p>
 
         <p className="text-center text-xs text-gray-400 mt-4 px-4">
-          By creating an account you agree that LeamTickets is not responsible for ticket
-          authenticity or event cancellations.
+          By creating an account you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-gray-600">Terms of Service</Link>.
         </p>
       </div>
     </div>

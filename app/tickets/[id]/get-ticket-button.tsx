@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Gift } from "lucide-react";
 
 interface GetTicketButtonProps {
   ticketId: string;
   isSold: boolean;
+  isLoggedIn?: boolean;
 }
 
-export function GetTicketButton({ ticketId, isSold }: GetTicketButtonProps) {
+export function GetTicketButton({ ticketId, isSold, isLoggedIn = false }: GetTicketButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +42,16 @@ export function GetTicketButton({ ticketId, isSold }: GetTicketButtonProps) {
       <div className="text-center py-3 rounded-xl bg-gray-100 text-sm font-semibold text-gray-500">
         Ticket claimed
       </div>
+    );
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <Link href={`/auth/login?callbackUrl=/tickets/${ticketId}`} className="block">
+        <Button size="lg" className="w-full">
+          Log in to claim
+        </Button>
+      </Link>
     );
   }
 

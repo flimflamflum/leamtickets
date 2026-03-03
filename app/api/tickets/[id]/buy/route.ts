@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(
@@ -6,6 +7,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Please log in to claim a ticket" }, { status: 401 });
+    }
+
     const { id } = await params;
 
     const ticket = await prisma.ticket.findUnique({
@@ -23,7 +29,7 @@ export async function POST(
 
     await prisma.ticket.update({
       where: { id },
-      data: { status: "SOLD" },
+      data: { status: "SOLD", buyerId: session.user.id },
     });
 
     return NextResponse.json({ success: true });

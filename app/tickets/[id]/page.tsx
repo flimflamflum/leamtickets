@@ -1,12 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Tag, ArrowLeft, User, Info } from "lucide-react";
 import { VenueBadge, Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
 import type { TicketWithSeller } from "@/types";
 import { GetTicketButton } from "./get-ticket-button";
+import { TicketImage } from "./ticket-image";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,6 +28,7 @@ export default async function TicketDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const session = await auth();
 
   const ticket = await prisma.ticket.findUnique({
     where: { id },
@@ -53,22 +55,7 @@ export default async function TicketDetailPage({
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3">
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 border border-gray-100">
-            <Image
-              src={ticket.imageUrl}
-              alt={`${ticket.eventName} ticket`}
-              fill
-              className="object-contain"
-              priority
-              sizes="(max-width: 1024px) 100vw, 60vw"
-              unoptimized={ticket.imageUrl.startsWith("data:")}
-            />
-            {isSold && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <Badge variant="sold" className="text-base px-4 py-2">Claimed</Badge>
-              </div>
-            )}
-          </div>
+          <TicketImage imageUrl={ticket.imageUrl} eventName={ticket.eventName} isSold={isSold} />
         </div>
 
         <div className="lg:col-span-2 flex flex-col gap-4">
@@ -109,14 +96,14 @@ export default async function TicketDetailPage({
               </p>
             </div>
 
-            <GetTicketButton ticketId={ticket.id} isSold={isSold} />
+            <GetTicketButton ticketId={ticket.id} isSold={isSold} isLoggedIn={!!session?.user} />
           </div>
 
           <div className="flex items-start gap-2 text-xs text-gray-400">
             <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
             <p>
               LeamTickets is not affiliated with Smack, Neon, or the University of Warwick.
-              Verify event details independently.
+              See our <Link href="/terms" className="underline hover:text-gray-600">Terms of Service</Link>.
             </p>
           </div>
         </div>

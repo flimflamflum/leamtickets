@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Calendar, Tag } from "lucide-react";
+import { Calendar, Tag, Lock } from "lucide-react";
 import { VenueBadge } from "@/components/ui/badge";
 import { formatPrice, formatDateShort } from "@/lib/utils";
 import type { TicketWithSeller } from "@/types";
@@ -15,16 +14,14 @@ export function TicketCard({ ticket }: TicketCardProps) {
       href={`/tickets/${ticket.id}`}
       className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
     >
-      {/* Image */}
-      <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
-        <Image
-          src={ticket.imageUrl}
-          alt={`${ticket.eventName} ticket`}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          unoptimized={ticket.imageUrl.startsWith("data:")}
-        />
+      {/* Placeholder – image hidden until purchase */}
+      <div className="relative aspect-[4/3] bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-2 text-gray-400">
+          <div className="w-12 h-12 rounded-xl bg-gray-200 flex items-center justify-center group-hover:bg-gray-300 transition-colors">
+            <Lock className="w-6 h-6" />
+          </div>
+          <span className="text-xs font-medium">Image hidden until purchase</span>
+        </div>
         <div className="absolute top-3 left-3">
           <VenueBadge venue={ticket.venue} />
         </div>

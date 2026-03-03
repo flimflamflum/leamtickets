@@ -29,7 +29,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tickets   Ticket[]
+  tickets       Ticket[] @relation("SellerTickets")
+  ticketsBought Ticket[] @relation("BuyerTickets")
 }
 
 model Ticket {
@@ -39,11 +40,13 @@ model Ticket {
   eventDate   DateTime
   ticketType  String
   resalePrice Float
-  imageUrl      String
-  description   String?
-  status        TicketStatus @default(AVAILABLE)
-  sellerId      String
-  seller        User         @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  imageUrl    String
+  description String?
+  status      TicketStatus @default(AVAILABLE)
+  sellerId    String
+  seller      User         @relation("SellerTickets", fields: [sellerId], references: [id], onDelete: Cascade)
+  buyerId     String?
+  buyer       User?        @relation("BuyerTickets", fields: [buyerId], references: [id], onDelete: SetNull)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }

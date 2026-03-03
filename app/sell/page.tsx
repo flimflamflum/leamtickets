@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, AlertCircle, X, ImageIcon } from "lucide-react";
@@ -278,7 +279,8 @@ export default function SellPage() {
         </Button>
 
         <p className="text-xs text-gray-400 text-center pb-4">
-          By listing a ticket you confirm you own it. LeamTickets is not affiliated with any venue.
+          By listing a ticket you confirm you own it and agree to our{" "}
+          <Link href="/terms" className="underline hover:text-gray-600">Terms of Service</Link>.
         </p>
       </form>
     </div>
