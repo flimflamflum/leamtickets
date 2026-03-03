@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Ticket, Mail, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { Mail } from "lucide-react";
 
 export function Footer() {
   return (
@@ -9,9 +10,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 font-bold text-foreground mb-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-muted-foreground rounded-lg flex items-center justify-center">
-                <Ticket className="w-4 h-4 text-primary-foreground" />
-              </div>
+              <Image src="/logo1.png" alt="LeamTickets" width={32} height={32} className="rounded-lg object-contain" />
               <span className="text-lg">LeamTickets</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description:
     "Buy and sell tickets for Smack and Neon in Leamington Spa. A student-to-student resale marketplace for University of Warwick students.",
   keywords: ["tickets", "Smack", "Neon", "Leamington Spa", "Warwick", "student", "resale"],
+  icons: { icon: "/logo1.png" },
   openGraph: {
     title: "LeamTickets",
     description: "Student ticket resale for Smack & Neon, Leamington Spa.",

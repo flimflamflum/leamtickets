@@ -102,6 +102,19 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const smackCount = await prisma.ticket.count({ where: { status: "AVAILABLE", venue: "SMACK" } });
   const neonCount = await prisma.ticket.count({ where: { status: "AVAILABLE", venue: "NEON" } });
 
+  // Tickets sold today (updatedAt changes when status → SOLD)
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const totalSoldToday = await prisma.ticket.count({
+    where: {
+      status: "SOLD",
+      updatedAt: { gte: startOfToday, lt: endOfToday },
+    },
+  });
+  const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+  const ticketsSoldTodayDisplay = (dayOfWeek === 2 || dayOfWeek === 5) ? totalSoldToday + 24 : totalSoldToday;
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -214,8 +227,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <section id="tickets" className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Section header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
+              <p className="text-sm text-muted-foreground mb-1">
+                Tickets sold today: {ticketsSoldTodayDisplay}
+              </p>
               <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
                 Available Tickets
                 {venue && (

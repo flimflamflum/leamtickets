@@ -6,7 +6,8 @@ import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, Ticket, LogOut, LayoutDashboard, Plus, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -33,9 +34,7 @@ export function Navbar() {
               href="/"
               className="flex items-center gap-2.5 font-bold text-foreground hover:opacity-80 transition-opacity"
             >
-              <div className="w-9 h-9 bg-gradient-to-br from-primary to-muted-foreground rounded-xl flex items-center justify-center shadow-lg">
-                <Ticket className="w-4 h-4 text-primary-foreground" />
-              </div>
+              <Image src="/logo1.png" alt="LeamTickets" width={36} height={36} className="rounded-xl object-contain" />
               <span className="text-lg hidden sm:block">LeamTickets</span>
             </Link>
 
