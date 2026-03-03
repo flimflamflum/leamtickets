@@ -1,43 +1,77 @@
 import Link from "next/link";
-import { Ticket } from "lucide-react";
+import { Ticket, Mail, ExternalLink } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-100 bg-white mt-auto">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gray-900 rounded-md flex items-center justify-center">
-              <Ticket className="w-3.5 h-3.5 text-white" />
-            </div>
-            <span className="font-semibold text-gray-900 text-sm">LeamTickets</span>
+    <footer className="border-t border-border bg-card/50 backdrop-blur-sm mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <Link href="/" className="flex items-center gap-2.5 font-bold text-foreground mb-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-muted-foreground rounded-lg flex items-center justify-center">
+                <Ticket className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="text-lg">LeamTickets</span>
+            </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+              Student-to-student ticket resale for Smack and Neon in Leamington Spa. 
+              Built by Warwick students, for Warwick students.
+            </p>
           </div>
 
-          <nav className="flex flex-wrap gap-4 text-sm text-gray-500">
-            <Link href="/" className="hover:text-gray-900 transition-colors">Browse</Link>
-            <Link href="/sell" className="hover:text-gray-900 transition-colors">Sell a Ticket</Link>
-            <Link href="/auth/login" className="hover:text-gray-900 transition-colors">Log in</Link>
-            <Link href="/terms" className="hover:text-gray-900 transition-colors">Terms of Service</Link>
-            <a href="mailto:leamtickets@gmail.com" className="hover:text-gray-900 transition-colors">Contact</a>
-          </nav>
+          {/* Quick links */}
+          <div>
+            <h3 className="font-semibold text-foreground text-sm mb-3">Quick Links</h3>
+            <nav className="flex flex-col gap-2">
+              <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Browse Tickets
+              </Link>
+              <Link href="/sell" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Sell a Ticket
+              </Link>
+              <Link href="/auth/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Log in
+              </Link>
+              <Link href="/auth/register" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Sign up
+              </Link>
+            </nav>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="font-semibold text-foreground text-sm mb-3">Legal</h3>
+            <nav className="flex flex-col gap-2">
+              <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Terms of Service
+              </Link>
+              <a
+                href="mailto:leamtickets@gmail.com"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+              >
+                <Mail className="w-3 h-3" />
+                Contact Us
+              </a>
+            </nav>
+          </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-100">
-          <p className="text-xs text-gray-400 leading-relaxed max-w-2xl">
-            <strong className="text-gray-500">Disclaimer:</strong> LeamTickets is an independent, student-run resale
-            marketplace. It is not affiliated with, endorsed by, or connected to Smack, Neon, the University of
-            Warwick, or any venue or organisation. By using this site you agree to our{" "}
-            <Link href="/terms" className="underline hover:text-gray-600 transition-colors">Terms of Service</Link>.
-          </p>
-          <p className="text-xs text-gray-400 mt-2">
-            Contact:{" "}
-            <a href="mailto:leamtickets@gmail.com" className="underline hover:text-gray-600 transition-colors">
-              leamtickets@gmail.com
-            </a>
-          </p>
-          <p className="text-xs text-gray-400 mt-1">
-            &copy; {new Date().getFullYear()} LeamTickets. All rights reserved.
-          </p>
+        {/* Divider */}
+        <div className="border-t border-border pt-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            {/* Disclaimer */}
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+              <strong className="text-foreground">Disclaimer:</strong> LeamTickets is an independent, student-run resale
+              marketplace. It is not affiliated with, endorsed by, or connected to Smack, Neon, the University of
+              Warwick, or any venue or organisation.
+            </p>
+
+            {/* Copyright */}
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              &copy; {new Date().getFullYear()} LeamTickets
+            </p>
+          </div>
         </div>
       </div>
     </footer>

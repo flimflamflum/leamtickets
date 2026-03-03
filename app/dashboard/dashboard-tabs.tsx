@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, ExternalLink, Clock, Lock, Ticket, Download } from "lucide-react";
+import { Plus, ExternalLink, Clock, Ticket, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VenueBadge, Badge } from "@/components/ui/badge";
 import { formatPrice, formatDateShort } from "@/lib/utils";
@@ -98,8 +98,15 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                   key={ticket.id}
                   className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4"
                 >
-                  <div className="w-20 h-20 rounded-xl flex-shrink-0 bg-gray-100 flex items-center justify-center">
-                    <Lock className="w-6 h-6 text-gray-400" />
+                  <div className="relative w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                    <Image
+                      src={ticket.imageUrl}
+                      alt={ticket.eventName}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                      unoptimized={ticket.imageUrl.startsWith("data:")}
+                    />
                   </div>
 
                   <div className="flex-1 min-w-0">

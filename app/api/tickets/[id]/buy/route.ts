@@ -31,6 +31,13 @@ export async function POST(
       return NextResponse.json({ error: "Ticket is no longer available" }, { status: 409 });
     }
 
+    if (ticket.sellerId === session.user.id) {
+      return NextResponse.json(
+        { error: "You cannot buy your own ticket. The listing remains for sale." },
+        { status: 400 }
+      );
+    }
+
     await prisma.ticket.update({
       where: { id },
       data: { status: "SOLD", buyerId: session.user.id },
@@ -39,26 +46,27 @@ export async function POST(
     const venue = venueLabel(ticket.venue);
     const buyerEmail = session.user.email ?? "";
 
-    if (buyerEmail) {
-      await sendPurchaseConfirmationEmail({
-        buyerEmail,
-        buyerName: session.user.name,
+    Promise.all([
+      buyerEmail
+        ? sendPurchaseConfirmationEmail({
+            buyerEmail,
+            buyerName: session.user.name,
+            eventName: ticket.eventName,
+            venue,
+            ticketType: ticket.ticketType,
+            resalePrice: ticket.resalePrice,
+            imageUrl: ticket.imageUrl,
+          })
+        : Promise.resolve(),
+      sendTicketSoldEmail({
+        sellerEmail: ticket.seller.email,
+        sellerName: ticket.seller.name,
         eventName: ticket.eventName,
         venue,
         ticketType: ticket.ticketType,
         resalePrice: ticket.resalePrice,
-        imageUrl: ticket.imageUrl,
-      });
-    }
-
-    await sendTicketSoldEmail({
-      sellerEmail: ticket.seller.email,
-      sellerName: ticket.seller.name,
-      eventName: ticket.eventName,
-      venue,
-      ticketType: ticket.ticketType,
-      resalePrice: ticket.resalePrice,
-    });
+      }),
+    ]).catch((err) => console.error("Email send failed:", err));
 
     return NextResponse.json({ success: true });
   } catch (error) {

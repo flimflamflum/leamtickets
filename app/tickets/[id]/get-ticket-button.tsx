@@ -4,18 +4,26 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Gift } from "lucide-react";
+import { Gift, Trash2, Check } from "lucide-react";
 
 interface GetTicketButtonProps {
   ticketId: string;
   isSold: boolean;
   isLoggedIn?: boolean;
+  isSeller?: boolean;
 }
 
-export function GetTicketButton({ ticketId, isSold, isLoggedIn = false }: GetTicketButtonProps) {
+export function GetTicketButton({
+  ticketId,
+  isSold,
+  isLoggedIn = false,
+  isSeller = false,
+}: GetTicketButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showDelistConfirm, setShowDelistConfirm] = useState(false);
+  const [isDelisting, setIsDelisting] = useState(false);
 
   const handleGetTicket = async () => {
     setIsLoading(true);
@@ -37,18 +45,76 @@ export function GetTicketButton({ ticketId, isSold, isLoggedIn = false }: GetTic
     }
   };
 
+  const handleDelist = async () => {
+    setIsDelisting(true);
+    try {
+      const res = await fetch(`/api/tickets/${ticketId}`, { method: "DELETE" });
+      if (res.ok) {
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } finally {
+      setIsDelisting(false);
+      setShowDelistConfirm(false);
+    }
+  };
+
   if (isSold) {
     return (
-      <div className="text-center py-3 rounded-xl bg-gray-100 text-sm font-semibold text-gray-500">
-        Ticket claimed
+      <div className="text-center py-3 rounded-xl bg-green-500/10 border border-green-200 dark:border-green-800 text-sm font-semibold text-green-600 dark:text-green-400">
+        <div className="flex items-center justify-center gap-2">
+          <Check className="w-4 h-4" />
+          Ticket claimed
+        </div>
       </div>
+    );
+  }
+
+  if (isSeller) {
+    if (showDelistConfirm) {
+      return (
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground text-center">Remove this listing from sale?</p>
+          <div className="flex gap-2">
+            <Button
+              variant="danger"
+              size="lg"
+              className="flex-1"
+              onClick={handleDelist}
+              isLoading={isDelisting}
+            >
+              Yes, delist
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="flex-1"
+              onClick={() => setShowDelistConfirm(false)}
+              disabled={isDelisting}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <Button
+        variant="outline"
+        size="lg"
+        className="w-full"
+        onClick={() => setShowDelistConfirm(true)}
+      >
+        <Trash2 className="w-4 h-4" />
+        Delist
+      </Button>
     );
   }
 
   if (!isLoggedIn) {
     return (
       <Link href={`/auth/login?callbackUrl=/tickets/${ticketId}`} className="block">
-        <Button size="lg" className="w-full">
+        <Button size="lg" className="w-full shine-effect">
           Log in to claim
         </Button>
       </Link>
@@ -62,12 +128,12 @@ export function GetTicketButton({ ticketId, isSold, isLoggedIn = false }: GetTic
         isLoading={isLoading}
         disabled={isLoading}
         size="lg"
-        className="w-full"
+        className="w-full shine-effect"
       >
         <Gift className="w-4 h-4" />
         Get ticket (free)
       </Button>
-      {error && <p className="text-xs text-red-500 text-center">{error}</p>}
+      {error && <p className="text-xs text-destructive text-center">{error}</p>}
     </div>
   );
 }

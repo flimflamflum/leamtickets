@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { formatPrice } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Plus, Ticket } from "lucide-react";
@@ -38,6 +39,7 @@ export default async function DashboardPage() {
 
   const available = user.tickets.filter((t) => t.status === "AVAILABLE");
   const sold = user.tickets.filter((t) => t.status === "SOLD");
+  const totalMoneyEarnt = sold.reduce((sum, t) => sum + t.resalePrice, 0);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
@@ -63,11 +65,18 @@ export default async function DashboardPage() {
           { label: "Active listings", value: available.length, sub: "available" },
           { label: "Tickets sold", value: sold.length, sub: "all time" },
           { label: "Your tickets", value: ticketsBought.length, sub: "claimed" },
-          { label: "Total listings", value: user.tickets.length, sub: "created" },
-        ].map(({ label, value, sub }) => (
+          { label: "Total money earnt", value: formatPrice(totalMoneyEarnt), sub: "from sold tickets", showCashout: true },
+        ].map(({ label, value, sub, showCashout }) => (
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
             <p className="text-xs text-gray-500 font-medium">{label}</p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+            <div className="flex items-center gap-2 mt-1">
+              <p className="text-2xl font-bold text-gray-900">{value}</p>
+              {showCashout && (
+                <Button type="button" variant="outline" size="sm" className="active:scale-95">
+                  Cashout
+                </Button>
+              )}
+            </div>
             <p className="text-xs text-gray-400">{sub}</p>
           </div>
         ))}

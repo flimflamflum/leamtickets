@@ -39,8 +39,8 @@ export function venueLabel(venue: string): string {
 
 export function venueColor(venue: string): string {
   const colors: Record<string, string> = {
-    SMACK: "bg-purple-100 text-purple-700 border-purple-200",
-    NEON: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    SMACK: "bg-purple-500 text-white border-purple-500 shadow-lg shadow-purple-500/30",
+    NEON: "bg-cyan-500 text-white border-cyan-500 shadow-lg shadow-cyan-500/30",
   };
-  return colors[venue] ?? "bg-gray-100 text-gray-700 border-gray-200";
+  return colors[venue] ?? "bg-muted text-muted-foreground border-border";
 }

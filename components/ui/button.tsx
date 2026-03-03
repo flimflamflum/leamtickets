@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline" | "gradient-smack" | "gradient-neon";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -16,18 +16,38 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
-          "inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98]",
+          "inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-200",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          "disabled:opacity-60 disabled:cursor-not-allowed",
+          "active:scale-[0.98]",
+          // Variants
           {
-            "bg-gray-900 text-white hover:bg-gray-700 focus-visible:ring-gray-900": variant === "primary",
-            "bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-400": variant === "secondary",
-            "bg-transparent text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-400": variant === "ghost",
-            "bg-red-50 text-red-600 hover:bg-red-100 focus-visible:ring-red-500": variant === "danger",
-            "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 focus-visible:ring-gray-400": variant === "outline",
+            // Primary - main CTA
+            "bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/20": variant === "primary",
+
+            // Secondary - subtle action
+            "bg-secondary text-secondary-foreground hover:bg-secondary/80": variant === "secondary",
+
+            // Ghost - minimal
+            "bg-transparent text-foreground hover:bg-muted": variant === "ghost",
+
+            // Danger - destructive action
+            "bg-destructive text-destructive-foreground hover:bg-destructive/90": variant === "danger",
+
+            // Outline - bordered
+            "border border-input bg-background text-foreground hover:bg-muted hover:text-foreground": variant === "outline",
+
+            // Gradient Smack - purple vibes
+            "gradient-smack text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/40": variant === "gradient-smack",
+
+            // Gradient Neon - cyan vibes
+            "gradient-neon text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/40": variant === "gradient-neon",
           },
+          // Sizes
           {
-            "px-3 py-1.5 text-sm gap-1.5": size === "sm",
+            "px-3 py-1.5 text-xs gap-1.5": size === "sm",
             "px-5 py-2.5 text-sm gap-2": size === "md",
-            "px-6 py-3 text-base gap-2": size === "lg",
+            "px-6 py-3 text-base gap-2.5": size === "lg",
           },
           className
         )}
