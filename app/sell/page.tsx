@@ -124,15 +124,6 @@ export default function SellPage() {
           />
 
           <Input
-            id="eventName"
-            label="Event name"
-            placeholder="e.g. Smack Saturday, Freshers Week, NYE Party"
-            required
-            error={errors.eventName?.message}
-            {...register("eventName")}
-          />
-
-          <Input
             id="eventDate"
             type="date"
             label="Event date"

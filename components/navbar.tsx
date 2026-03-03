@@ -110,11 +110,17 @@ export function Navbar() {
                 </Link>
                 <button
                   onClick={() => signOut({ redirectTo: "/" })}
-                  title="Sign out"
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 flex items-center gap-1.5 max-w-[150px] truncate"
+                  className="group/btn px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 flex items-center gap-1.5 max-w-[150px] min-w-[100px]"
                 >
-                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span className="truncate">{session.user.email}</span>
+                  <LogOut className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 group-hover/btn:scale-110" />
+                  <span className="relative inline-block min-w-0 flex-1 overflow-hidden">
+                    <span className="block truncate opacity-100 transition-opacity duration-200 group-hover/btn:opacity-0">
+                      {session.user.email}
+                    </span>
+                    <span className="absolute inset-0 flex items-center truncate opacity-0 transition-opacity duration-200 group-hover/btn:opacity-100">
+                      Sign out
+                    </span>
+                  </span>
                 </button>
               </>
             ) : (

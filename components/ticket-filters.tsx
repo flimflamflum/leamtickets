@@ -26,7 +26,7 @@ export function TicketFilters() {
   const venue = searchParams.get("venue") ?? "";
   const dateFrom = searchParams.get("dateFrom") ?? "";
   const dateTo = searchParams.get("dateTo") ?? "";
-  const sortBy = searchParams.get("sortBy") ?? "newest";
+  const sortBy = searchParams.get("sortBy") ?? "price_asc";
 
   const updateParams = useCallback(
     (updates: Record<string, string>) => {
@@ -47,7 +47,7 @@ export function TicketFilters() {
     router.push("/", { scroll: false });
   };
 
-  const hasActiveFilters = venue || dateFrom || dateTo || (sortBy && sortBy !== "newest");
+  const hasActiveFilters = venue || dateFrom || dateTo || (sortBy && sortBy !== "price_asc");
 
   return (
     <div className="bg-card rounded-2xl border border-border/60 shadow-sm p-4">

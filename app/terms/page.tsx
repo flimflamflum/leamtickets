@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
@@ -71,7 +71,17 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Prohibited Conduct</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Seller Payouts & Cashout</h2>
+          <p className="text-gray-700">
+            Sellers can cash out their earnings <strong>48 hours after the event date listed</strong> on
+            their ticket. This delay is in place to protect buyers from scams and to allow time for
+            any disputes to be raised before funds are released. It helps ensure that buyers receive
+            valid tickets before the seller can withdraw payment.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Prohibited Conduct</h2>
           <p className="text-gray-700 mb-2">You must not:</p>
           <ul className="list-disc pl-6 space-y-1 text-gray-700">
             <li>List tickets you do not own or have the right to sell</li>
@@ -84,7 +94,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Disclaimer of Warranties</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Disclaimer of Warranties</h2>
           <p className="text-gray-700">
             The Platform is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
             express or implied. We do not warrant that the Platform will be uninterrupted, error-free,
@@ -93,7 +103,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Limitation of Liability</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">8. Limitation of Liability</h2>
           <p className="text-gray-700">
             To the fullest extent permitted by law, LeamTickets, its operators, and affiliates
             shall not be liable for any indirect, incidental, special, consequential, or punitive
@@ -104,7 +114,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">8. Dispute Resolution</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">9. Dispute Resolution</h2>
           <p className="text-gray-700">
             Disputes between buyers and sellers are solely between those users. We encourage you to
             resolve issues directly. We may, at our discretion, provide assistance or mediation,
@@ -113,7 +123,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">9. Changes</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">10. Changes</h2>
           <p className="text-gray-700">
             We may update these Terms at any time. Continued use of the Platform after changes
             constitutes acceptance of the updated Terms.
@@ -121,7 +131,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">10. Contact</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">11. Contact</h2>
           <p className="text-gray-700">
             For questions, scam reports, complaints, or support, contact us at{" "}
             <a href="mailto:leamtickets@gmail.com" className="text-gray-900 font-medium underline hover:no-underline">
@@ -132,13 +142,21 @@ export default function TermsPage() {
         </section>
       </div>
 
-      <div className="mt-10 pt-6 border-t border-gray-200">
-        <Link href="/">
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="w-4 h-4" />
-            Back to homepage
-          </Button>
-        </Link>
+      <div className="mt-10 pt-6 border-t border-gray-200 space-y-4">
+        <div className="flex flex-wrap gap-3">
+          <Link href="/">
+            <Button variant="outline" size="sm">
+              <ArrowLeft className="w-4 h-4" />
+              Back to homepage
+            </Button>
+          </Link>
+          <Link href="/dispute">
+            <Button variant="outline" size="sm" className="border-amber-500/50 text-amber-700 hover:bg-amber-500/10 hover:border-amber-500 dark:text-amber-400 dark:border-amber-500/50 dark:hover:bg-amber-500/10">
+              <AlertCircle className="w-4 h-4" />
+              Dispute
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Mail } from "lucide-react";
 
 export function Footer() {
   return (
@@ -43,13 +42,12 @@ export function Footer() {
               <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Terms of Service
               </Link>
-              <a
-                href="mailto:leamtickets@gmail.com"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-              >
-                <Mail className="w-3 h-3" />
-                Contact Us
-              </a>
+              <Link href="/dispute" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Dispute
+              </Link>
+              <span className="text-sm text-muted-foreground">
+                leamtickets@gmail.com
+              </span>
             </nav>
           </div>
         </div>

@@ -17,9 +17,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     select: { eventName: true, venue: true },
   });
   if (!ticket) return { title: "Ticket not found – LeamTickets" };
+  const title = ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
   return {
-    title: `${ticket.eventName} – LeamTickets`,
-    description: `Buy a resale ticket for ${ticket.eventName}.`,
+    title: `${title} – LeamTickets`,
+    description: `Buy a resale ticket for ${title}.`,
   };
 }
 
@@ -75,7 +76,9 @@ export default async function TicketDetailPage({
               {isSeller && <Badge variant="default">Your listing</Badge>}
               {isSold && <Badge variant="sold">Claimed</Badge>}
             </div>
-            <h1 className="text-2xl font-bold text-foreground">{ticket.eventName}</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              {ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket"}
+            </h1>
           </div>
 
           <div className="bg-card rounded-2xl border border-border/60 shadow-sm p-4 space-y-2.5">

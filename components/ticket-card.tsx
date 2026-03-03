@@ -74,12 +74,10 @@ export function TicketCard({ ticket, currentUserId }: TicketCardProps) {
 
       {/* Content */}
       <div className="p-4">
-        {/* Event name */}
-        <h3 className="font-bold text-foreground text-sm leading-tight line-clamp-2 mb-3 group-hover:text-primary transition-colors">
-          {ticket.eventName}
-        </h3>
-
         {/* Meta info */}
+        <h3 className="font-bold text-foreground text-sm mb-2">
+          {ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket"}
+        </h3>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <div className="w-5 h-5 rounded-md bg-muted flex items-center justify-center">

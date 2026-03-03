@@ -20,10 +20,6 @@ export const loginSchema = z.object({
 
 export const createTicketSchema = z.object({
   venue: z.enum(["SMACK", "NEON"], { message: "Please select a venue" }),
-  eventName: z
-    .string()
-    .min(2, "Event name must be at least 2 characters")
-    .max(100, "Event name must be under 100 characters"),
   eventDate: z.string().refine((val) => {
     const date = new Date(val);
     return !isNaN(date.getTime());

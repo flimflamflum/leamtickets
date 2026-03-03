@@ -46,11 +46,11 @@ async function TicketGrid({
 
   const orderBy = (() => {
     switch (sortBy) {
-      case "price_asc": return { resalePrice: "asc" as const };
       case "price_desc": return { resalePrice: "desc" as const };
+      case "newest": return { createdAt: "desc" as const };
       case "date_asc": return { eventDate: "asc" as const };
       case "date_desc": return { eventDate: "desc" as const };
-      default: return { createdAt: "desc" as const };
+      default: return { resalePrice: "asc" as const };
     }
   })();
 

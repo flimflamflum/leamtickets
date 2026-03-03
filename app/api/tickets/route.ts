@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const venue = searchParams.get("venue") as Venue | null;
     const dateFrom = searchParams.get("dateFrom");
     const dateTo = searchParams.get("dateTo");
-    const sortBy = searchParams.get("sortBy") ?? "newest";
+    const sortBy = searchParams.get("sortBy") ?? "price_asc";
 
     const where: Record<string, unknown> = {
       status: "AVAILABLE",
@@ -70,8 +70,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { venue, eventName, eventDate, ticketType, resalePrice, imageUrl, description } =
+    const { venue, eventDate, ticketType, resalePrice, imageUrl, description } =
       parsed.data;
+
+    const eventName = venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
 
     const ticket = await prisma.ticket.create({
       data: {

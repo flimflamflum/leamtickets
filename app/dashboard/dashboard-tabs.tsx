@@ -21,14 +21,18 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
   const available = listings.filter((t) => t.status === "AVAILABLE");
   const sold = listings.filter((t) => t.status === "SOLD");
 
-  const handleSaveImage = async (imageUrl: string, eventName: string) => {
+  const getVenueTitle = (venue: string) =>
+    venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
+
+  const handleSaveImage = async (imageUrl: string, venue: string) => {
+    const title = getVenueTitle(venue);
     try {
       const res = await fetch(imageUrl);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `ticket-${eventName.replace(/\s+/g, "-").toLowerCase()}.png`;
+      link.download = `ticket-${title.replace(/\s+/g, "-").toLowerCase()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -36,7 +40,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
     } catch {
       const link = document.createElement("a");
       link.href = imageUrl;
-      link.download = `ticket-${eventName.replace(/\s+/g, "-").toLowerCase()}.png`;
+      link.download = `ticket-${title.replace(/\s+/g, "-").toLowerCase()}.png`;
       link.target = "_blank";
       document.body.appendChild(link);
       link.click();
@@ -101,7 +105,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                   <div className="relative w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden bg-muted">
                     <Image
                       src={ticket.imageUrl}
-                      alt={ticket.eventName}
+                      alt={getVenueTitle(ticket.venue)}
                       fill
                       className="object-cover"
                       sizes="80px"
@@ -118,7 +122,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                           {ticket.status === "SOLD" && <Badge variant="sold">Sold</Badge>}
                         </div>
                         <h3 className="font-semibold text-foreground text-sm mt-1.5 truncate">
-                          {ticket.eventName}
+                          {getVenueTitle(ticket.venue)}
                         </h3>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {formatDateShort(ticket.eventDate)} · {ticket.ticketType}
@@ -189,7 +193,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                   <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
                     <Image
                       src={ticket.imageUrl}
-                      alt={ticket.eventName}
+                      alt={getVenueTitle(ticket.venue)}
                       fill
                       className="object-cover"
                       sizes="96px"
@@ -205,7 +209,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                           <Badge variant="available">Yours</Badge>
                         </div>
                         <h3 className="font-semibold text-foreground text-sm mt-1.5 truncate">
-                          {ticket.eventName}
+                          {getVenueTitle(ticket.venue)}
                         </h3>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {formatDateShort(ticket.eventDate)} · {ticket.ticketType}
@@ -216,7 +220,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleSaveImage(ticket.imageUrl, ticket.eventName)}
+                          onClick={() => handleSaveImage(ticket.imageUrl, ticket.venue)}
                         >
                           <Download className="w-3 h-3" />
                           Save image
