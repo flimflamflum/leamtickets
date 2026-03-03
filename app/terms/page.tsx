@@ -52,7 +52,7 @@ export default function TermsPage() {
           <p className="text-gray-700">
             While we are not liable, we take user safety seriously. <strong>We will investigate all
             reported scams and fraudulent activity.</strong> If you believe you have been scammed,
-            please contact us with details. We may take action against accounts involved in fraud,
+            please contact us at leamtickets@gmail.com with details. We may take action against accounts involved in fraud,
             including suspension or removal, and we will cooperate with authorities where appropriate.
           </p>
         </section>
@@ -123,8 +123,11 @@ export default function TermsPage() {
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">10. Contact</h2>
           <p className="text-gray-700">
-            For questions, scam reports, or support, contact us at the email address provided on
-            the Platform. We aim to respond to scam reports promptly and take appropriate action.
+            For questions, scam reports, complaints, or support, contact us at{" "}
+            <a href="mailto:leamtickets@gmail.com" className="text-gray-900 font-medium underline hover:no-underline">
+              leamtickets@gmail.com
+            </a>
+            . We aim to respond promptly and take appropriate action.
           </p>
         </section>
       </div>

@@ -18,6 +18,7 @@ export function Footer() {
             <Link href="/sell" className="hover:text-gray-900 transition-colors">Sell a Ticket</Link>
             <Link href="/auth/login" className="hover:text-gray-900 transition-colors">Log in</Link>
             <Link href="/terms" className="hover:text-gray-900 transition-colors">Terms of Service</Link>
+            <a href="mailto:leamtickets@gmail.com" className="hover:text-gray-900 transition-colors">Contact</a>
           </nav>
         </div>
 
@@ -29,6 +30,12 @@ export function Footer() {
             <Link href="/terms" className="underline hover:text-gray-600 transition-colors">Terms of Service</Link>.
           </p>
           <p className="text-xs text-gray-400 mt-2">
+            Contact:{" "}
+            <a href="mailto:leamtickets@gmail.com" className="underline hover:text-gray-600 transition-colors">
+              leamtickets@gmail.com
+            </a>
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
             &copy; {new Date().getFullYear()} LeamTickets. All rights reserved.
           </p>
         </div>

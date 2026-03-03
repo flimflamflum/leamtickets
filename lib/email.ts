@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
+  host: process.env.SMTP_HOST ?? "smtp.gmail.com",
   port: Number(process.env.SMTP_PORT) || 587,
   secure: false,
   auth: {
@@ -10,6 +10,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+function dataUrlToBuffer(dataUrl: string): { buffer: Buffer; mimeType: string } | null {
+  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) return null;
+  const mimeType = match[1];
+  const base64 = match[2];
+  return {
+    buffer: Buffer.from(base64, "base64"),
+    mimeType,
+  };
+}
+
 interface TicketSoldEmailProps {
   sellerEmail: string;
   sellerName?: string | null;
@@ -17,9 +28,6 @@ interface TicketSoldEmailProps {
   venue: string;
   ticketType: string;
   resalePrice: number;
-  platformFee: number;
-  sellerPayout: number;
-  buyerEmail: string;
 }
 
 export async function sendTicketSoldEmail({
@@ -29,9 +37,6 @@ export async function sendTicketSoldEmail({
   venue,
   ticketType,
   resalePrice,
-  platformFee,
-  sellerPayout,
-  buyerEmail,
 }: TicketSoldEmailProps) {
   const name = sellerName ?? "Seller";
 
@@ -42,7 +47,7 @@ export async function sendTicketSoldEmail({
     html: `
       <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #ffffff;">
         <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 8px;">Your ticket sold!</h1>
-        <p style="color: #6b7280; margin-bottom: 24px;">Hi ${name}, great news — someone purchased your ticket.</p>
+        <p style="color: #6b7280; margin-bottom: 24px;">Hi ${name}, great news — someone claimed your ticket.</p>
         
         <div style="background: #f9fafb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
           <p style="margin: 0 0 8px 0; font-weight: 600; color: #111827;">${eventName} @ ${venue}</p>
@@ -50,21 +55,13 @@ export async function sendTicketSoldEmail({
         </div>
 
         <div style="border-radius: 12px; border: 1px solid #e5e7eb; padding: 20px; margin-bottom: 24px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-            <span style="color: #6b7280;">Sale price</span>
-            <span style="color: #111827;">£${resalePrice.toFixed(2)}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-            <span style="color: #6b7280;">Platform fee (30%)</span>
-            <span style="color: #ef4444;">−£${platformFee.toFixed(2)}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 1px solid #e5e7eb; font-weight: 700;">
-            <span style="color: #111827;">Your payout</span>
-            <span style="color: #16a34a;">£${sellerPayout.toFixed(2)}</span>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #6b7280;">Listed price</span>
+            <span style="color: #111827; font-weight: 700;">£${resalePrice.toFixed(2)}</span>
           </div>
         </div>
 
-        <p style="color: #6b7280; font-size: 14px;">Your payout will be transferred to your Stripe account within 2–5 business days.</p>
+        <p style="color: #6b7280; font-size: 14px;">The buyer has received the ticket via email. Thanks for using LeamTickets!</p>
         <p style="color: #9ca3af; font-size: 12px; margin-top: 32px;">LeamTickets is not affiliated with Smack, Neon, or the University of Warwick.</p>
       </div>
     `,
@@ -77,7 +74,43 @@ interface PurchaseConfirmationEmailProps {
   eventName: string;
   venue: string;
   ticketType: string;
-  amountPaid: number;
+  resalePrice: number;
+  imageUrl: string;
+}
+
+async function getImageAttachment(
+  imageUrl: string,
+  eventName: string
+): Promise<Array<{ filename: string; content: Buffer; contentType: string }>> {
+  const parsed = dataUrlToBuffer(imageUrl);
+  if (parsed) {
+    const ext = parsed.mimeType.includes("png") ? "png" : parsed.mimeType.includes("webp") ? "webp" : "jpg";
+    return [
+      {
+        filename: `ticket-${eventName.replace(/\s+/g, "-")}.${ext}`,
+        content: parsed.buffer,
+        contentType: parsed.mimeType,
+      },
+    ];
+  }
+  if (imageUrl.startsWith("http")) {
+    try {
+      const res = await fetch(imageUrl);
+      const buffer = Buffer.from(await res.arrayBuffer());
+      const contentType = res.headers.get("content-type") ?? "image/png";
+      const ext = contentType.includes("png") ? "png" : contentType.includes("webp") ? "webp" : "jpg";
+      return [
+        {
+          filename: `ticket-${eventName.replace(/\s+/g, "-")}.${ext}`,
+          content: buffer,
+          contentType,
+        },
+      ];
+    } catch {
+      return [];
+    }
+  }
+  return [];
 }
 
 export async function sendPurchaseConfirmationEmail({
@@ -86,28 +119,32 @@ export async function sendPurchaseConfirmationEmail({
   eventName,
   venue,
   ticketType,
-  amountPaid,
+  resalePrice,
+  imageUrl,
 }: PurchaseConfirmationEmailProps) {
   const name = buyerName ?? "there";
+
+  const attachments = await getImageAttachment(imageUrl, eventName);
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: buyerEmail,
-    subject: `Purchase confirmed: ${eventName}`,
+    subject: `Your ticket: ${eventName}`,
     html: `
       <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #ffffff;">
-        <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 8px;">Purchase confirmed!</h1>
-        <p style="color: #6b7280; margin-bottom: 24px;">Hi ${name}, your ticket purchase is confirmed. The seller will be in touch.</p>
+        <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 8px;">Your ticket is attached!</h1>
+        <p style="color: #6b7280; margin-bottom: 24px;">Hi ${name}, your ticket is confirmed. Please find it attached to this email.</p>
         
         <div style="background: #f9fafb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
           <p style="margin: 0 0 8px 0; font-weight: 600; color: #111827;">${eventName} @ ${venue}</p>
           <p style="margin: 0 0 8px 0; color: #6b7280;">${ticketType}</p>
-          <p style="margin: 0; font-weight: 700; color: #111827;">£${amountPaid.toFixed(2)}</p>
+          <p style="margin: 0; font-weight: 700; color: #111827;">£${resalePrice.toFixed(2)}</p>
         </div>
 
-        <p style="color: #6b7280; font-size: 14px;">Keep this email as proof of purchase. If you have any issues, contact us at support@leamtickets.com.</p>
+        <p style="color: #6b7280; font-size: 14px;">Save the ticket image and show it at the venue. If you have any issues, reply to this email.</p>
         <p style="color: #9ca3af; font-size: 12px; margin-top: 32px;">LeamTickets is not affiliated with Smack, Neon, or the University of Warwick.</p>
       </div>
     `,
+    ...(attachments.length > 0 && { attachments }),
   });
 }
