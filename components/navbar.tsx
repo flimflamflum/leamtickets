@@ -59,7 +59,7 @@ export function Navbar() {
                   Dashboard
                 </Link>
                 <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
+                  onClick={() => signOut({ redirectTo: "/" })}
                   className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
                 >
                   <LogOut className="w-3.5 h-3.5" />
@@ -71,7 +71,7 @@ export function Navbar() {
                 <Link href="/auth/login">
                   <Button variant="ghost" size="sm">Log in</Button>
                 </Link>
-                <Link href="/sell">
+                <Link href="/auth/register">
                   <Button size="sm">
                     <Plus className="w-3.5 h-3.5" />
                     Sell Ticket
@@ -121,7 +121,7 @@ export function Navbar() {
                 Dashboard
               </Link>
               <button
-                onClick={() => { setMobileOpen(false); signOut({ callbackUrl: "/" }); }}
+                onClick={() => { setMobileOpen(false); signOut({ redirectTo: "/" }); }}
                 className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
               >
                 <LogOut className="w-4 h-4" />

@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, AlertCircle, X, ImageIcon } from "lucide-react";
@@ -14,7 +13,6 @@ import { formatPrice, venueLabel } from "@/lib/utils";
 import { PLATFORM_FEE_PERCENT, calculateFees } from "@/types";
 
 export default function SellPage() {
-  const { data: session } = useSession();
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);

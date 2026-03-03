@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Calendar, Tag, ArrowLeft, User, Info, Mail } from "lucide-react";
 import { VenueBadge, Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
-import { PLATFORM_FEE_PERCENT, calculateFees } from "@/types";
 import type { TicketWithSeller } from "@/types";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -39,7 +38,6 @@ export default async function TicketDetailPage({
 
   if (!ticket) notFound();
 
-  const fees = calculateFees(ticket.resalePrice);
   const isSold = ticket.status === "SOLD";
 
   return (
@@ -110,26 +108,13 @@ export default async function TicketDetailPage({
 
           {/* Price card */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-            <p className="text-3xl font-bold text-gray-900 mb-1">{formatPrice(ticket.resalePrice)}</p>
-            {ticket.originalPrice !== ticket.resalePrice && (
-              <p className="text-sm text-gray-400 line-through mb-3">
-                Original: {formatPrice(ticket.originalPrice)}
-              </p>
-            )}
-
-            <div className="space-y-1.5 text-xs text-gray-500 border-t border-gray-100 pt-3 mb-4">
-              <div className="flex justify-between">
-                <span>Ticket price</span>
-                <span>{formatPrice(fees.resalePrice)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Platform fee ({PLATFORM_FEE_PERCENT}%)</span>
-                <span>{formatPrice(fees.platformFee)}</span>
-              </div>
-              <div className="flex justify-between font-semibold text-gray-700 pt-1.5 border-t border-gray-100">
-                <span>Seller receives</span>
-                <span>{formatPrice(fees.sellerPayout)}</span>
-              </div>
+            <div className="mb-4">
+              <p className="text-3xl font-bold text-gray-900">{formatPrice(ticket.resalePrice)}</p>
+              {ticket.originalPrice !== ticket.resalePrice && (
+                <p className="text-sm text-gray-400 line-through mt-0.5">
+                  Original: {formatPrice(ticket.originalPrice)}
+                </p>
+              )}
             </div>
 
             {isSold ? (
@@ -151,8 +136,8 @@ export default async function TicketDetailPage({
           <div className="flex items-start gap-2 text-xs text-gray-400">
             <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
             <p>
-              Online payments are coming soon. For now, contact the seller directly to arrange
-              payment. LeamTickets is not affiliated with Smack, Neon, or the University of Warwick.
+              LeamTickets is not affiliated with Smack, Neon, or the University of Warwick.
+              Verify event details independently before completing any purchase.
             </p>
           </div>
         </div>
