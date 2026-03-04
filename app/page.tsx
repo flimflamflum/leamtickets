@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { TicketCard, TicketCardSkeleton } from "@/components/ticket-card";
 import { TicketFilters } from "@/components/ticket-filters";
-import { Ticket, Zap, Shield, Users } from "lucide-react";
+import { Ticket, Zap } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Venue } from "@prisma/client";
@@ -12,22 +12,21 @@ import type { TicketWithSeller } from "@/types";
 interface HomePageProps {
   searchParams: Promise<{
     venue?: string;
-    dateFrom?: string;
-    dateTo?: string;
+    dayFilter?: string;
     sortBy?: string;
   }>;
 }
 
+const DAY_OF_WEEK = { tuesday: 2, friday: 5 } as const; // 0=Sun, 1=Mon, 2=Tue, ..., 5=Fri
+
 async function TicketGrid({
   venue,
-  dateFrom,
-  dateTo,
+  dayFilter,
   sortBy,
   currentUserId,
 }: {
   venue?: string;
-  dateFrom?: string;
-  dateTo?: string;
+  dayFilter?: string;
   sortBy?: string;
   currentUserId?: string;
 }) {
@@ -37,12 +36,7 @@ async function TicketGrid({
     where.venue = venue as Venue;
   }
 
-  if (dateFrom || dateTo) {
-    where.eventDate = {
-      ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
-      ...(dateTo ? { lte: new Date(dateTo) } : {}),
-    };
-  }
+  // Note: day-of-week filtering is applied after fetch since Prisma has no native support
 
   const orderBy = (() => {
     switch (sortBy) {
@@ -54,7 +48,7 @@ async function TicketGrid({
     }
   })();
 
-  const tickets = await prisma.ticket.findMany({
+  let tickets = await prisma.ticket.findMany({
     where,
     orderBy,
     include: {
@@ -63,6 +57,12 @@ async function TicketGrid({
         },
     },
   }) as TicketWithSeller[];
+
+  // Filter by day of week when dayFilter is set (Tuesday=2, Friday=5)
+  if (dayFilter && dayFilter in DAY_OF_WEEK) {
+    const targetDay = DAY_OF_WEEK[dayFilter as keyof typeof DAY_OF_WEEK];
+    tickets = tickets.filter((t) => new Date(t.eventDate).getDay() === targetDay);
+  }
 
   if (tickets.length === 0) {
     return (
@@ -73,7 +73,7 @@ async function TicketGrid({
         <div className="max-w-sm">
           <p className="font-bold text-foreground text-xl mb-2">No tickets available</p>
           <p className="text-muted-foreground text-base leading-relaxed">
-            {venue || dateFrom || dateTo
+            {venue || dayFilter
               ? "Try adjusting your filters to see more results, or check back later."
               : "Be the first to list a ticket! Students are always looking for last-minute deals."}
           </p>
@@ -98,7 +98,7 @@ async function TicketGrid({
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
-  const { venue, dateFrom, dateTo, sortBy } = params;
+  const { venue, dayFilter, sortBy } = params;
   const session = await auth();
 
   // Get ticket counts for stats
@@ -144,84 +144,29 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-purple-500/5 to-transparent dark:from-purple-500/10" />
         <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-tr from-cyan-500/5 to-transparent dark:from-cyan-500/10" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 lg:gap-12">
-            {/* Left: Badge, heading, description */}
-            <div className="lg:max-w-xl">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-border/50 mb-6">
-                <Zap className="w-4 h-4 text-purple-500 dark:text-purple-400" />
-                <span className="text-sm font-medium text-foreground">Student-to-student resale</span>
-              </div>
-
-              {/* Main heading */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight mb-6">
-                Buy and Sell Tickets for{" "}
-                <span className="text-cyan-500">Neon</span>{" "}
-                and{" "}
-                <span className="text-purple-500">Smack</span>
-              </h1>
-
-              <p className="text-xl sm:text-2xl font-semibold text-foreground mb-6">
-                Tickets for sale: {totalTickets}
-              </p>
-
-              {/* Subheading */}
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                We all love Leamington spa, especially Smack and Neon👀👀 Unfortunately they almost always sell out which is why we built this marketplace where you can securely buy and sell tickets.
-              </p>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="flex flex-col gap-2">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-border/50 w-fit mb-1">
+              <Zap className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+              <span className="text-sm font-medium text-foreground">Student-to-student resale</span>
             </div>
 
-            {/* Right: Buttons and trust badges */}
-            <div className="flex flex-col items-center lg:items-end gap-6 shrink-0">
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/sell">
-                  <Button size="lg" className="rounded-xl gap-2 px-8 shine-effect text-base w-full sm:w-auto">
-                    <Zap className="w-4 h-4" />
-                    Sell a Ticket
-                  </Button>
-                </Link>
-                <Link href="/?venue=NEON#tickets">
-                  <Button
-                    size="lg"
-                    className="rounded-xl px-8 text-base w-full sm:w-auto bg-cyan-500 hover:bg-cyan-600 text-white border-0 shadow-lg shadow-cyan-500/25 dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-white"
-                  >
-                    Buy Neon
-                  </Button>
-                </Link>
-                <Link href="/?venue=SMACK#tickets">
-                  <Button
-                    size="lg"
-                    className="rounded-xl px-8 text-base w-full sm:w-auto bg-purple-500 hover:bg-purple-600 text-white border-0 shadow-lg shadow-purple-500/25 dark:bg-purple-500 dark:hover:bg-purple-600 dark:text-white"
-                  >
-                    Buy Smack
-                  </Button>
-                </Link>
-              </div>
+            {/* Main heading */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+              Buy and Sell Tickets for{" "}
+              <span className="text-cyan-500">Neon</span>{" "}
+              and{" "}
+              <span className="text-purple-500">Smack</span>
+            </h1>
 
-              {/* Trust badges */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-end gap-6 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
-                  </div>
-                  <span>Secure platform</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                    <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <span>Student verified</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                    <Ticket className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                  </div>
-                  <span>Instant transfer</span>
-                </div>
-              </div>
-            </div>
+            <p className="text-xl sm:text-2xl font-semibold text-foreground">
+              Tickets for sale: {totalTickets}
+            </p>
+
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              We all love Leamington spa, especially Smack and Neon👀👀 Unfortunately they almost always sell out which is why we built this marketplace where you can securely buy and sell tickets.
+            </p>
           </div>
         </div>
       </section>
@@ -270,7 +215,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               <p className="text-sm text-muted-foreground mb-1">
                 Tickets sold today: {ticketsSoldTodayDisplay}
               </p>
-              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-foreground flex flex-wrap items-center gap-2">
                 Available Tickets
                 {venue && (
                   <span className={`
@@ -281,6 +226,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                     }
                   `}>
                     {venue === "SMACK" ? "Smack" : "Neon"}
+                  </span>
+                )}
+                {dayFilter === "tuesday" && (
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/50">
+                    Smack Tuesday
+                  </span>
+                )}
+                {dayFilter === "friday" && (
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/50">
+                    Neon Friday
                   </span>
                 )}
               </h2>
@@ -304,8 +259,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             >
               <TicketGrid
                 venue={venue}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
+                dayFilter={dayFilter}
                 sortBy={sortBy}
                 currentUserId={session?.user?.id}
               />

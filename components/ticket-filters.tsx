@@ -24,8 +24,7 @@ export function TicketFilters() {
   const searchParams = useSearchParams();
 
   const venue = searchParams.get("venue") ?? "";
-  const dateFrom = searchParams.get("dateFrom") ?? "";
-  const dateTo = searchParams.get("dateTo") ?? "";
+  const dayFilter = searchParams.get("dayFilter") ?? "";
   const sortBy = searchParams.get("sortBy") ?? "price_asc";
 
   const updateParams = useCallback(
@@ -47,7 +46,7 @@ export function TicketFilters() {
     router.push("/", { scroll: false });
   };
 
-  const hasActiveFilters = venue || dateFrom || dateTo || (sortBy && sortBy !== "price_asc");
+  const hasActiveFilters = venue || dayFilter || (sortBy && sortBy !== "price_asc");
 
   return (
     <div className="bg-card rounded-2xl border border-border/60 shadow-sm p-4">
@@ -67,7 +66,7 @@ export function TicketFilters() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {/* Venue filter */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Venue</label>
@@ -87,36 +86,35 @@ export function TicketFilters() {
           </select>
         </div>
 
-        {/* Date from */}
+        {/* Day filter buttons */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">From date</label>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(e) => updateParams({ dateFrom: e.target.value })}
-            className={cn(
-              "rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground",
-              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
-              "transition-all duration-200",
-              "hover:border-muted-foreground/30"
-            )}
-          />
-        </div>
-
-        {/* Date to */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">To date</label>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(e) => updateParams({ dateTo: e.target.value })}
-            className={cn(
-              "rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground",
-              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
-              "transition-all duration-200",
-              "hover:border-muted-foreground/30"
-            )}
-          />
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Event day</label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => updateParams({ dayFilter: dayFilter === "tuesday" ? "" : "tuesday" })}
+              className={cn(
+                "flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                dayFilter === "tuesday"
+                  ? "border-purple-500 bg-purple-500/20 text-purple-600 dark:text-purple-400"
+                  : "border-input bg-background text-foreground hover:border-muted-foreground/30"
+              )}
+            >
+              Smack Tuesday
+            </button>
+            <button
+              type="button"
+              onClick={() => updateParams({ dayFilter: dayFilter === "friday" ? "" : "friday" })}
+              className={cn(
+                "flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                dayFilter === "friday"
+                  ? "border-cyan-500 bg-cyan-500/20 text-cyan-600 dark:text-cyan-400"
+                  : "border-input bg-background text-foreground hover:border-muted-foreground/30"
+              )}
+            >
+              Neon Friday
+            </button>
+          </div>
         </div>
 
         {/* Sort */}
