@@ -24,10 +24,13 @@ export const createTicketSchema = z.object({
     const date = new Date(val);
     return !isNaN(date.getTime());
   }, "Please enter a valid event date"),
-  ticketType: z.preprocess(
-    (v) => (v === "" || v === null ? undefined : v),
-    z.string().min(2, "Ticket type must be at least 2 characters").max(50, "Ticket type must be under 50 characters").optional()
-  ),
+  ticketType: z
+    .string()
+    .max(50, "Ticket type must be under 50 characters")
+    .refine((v) => v.length === 0 || v.length >= 2, {
+      message: "Ticket type must be at least 2 characters",
+    })
+    .optional(),
   resalePrice: z
     .number()
     .min(0, "Price must be 0 or more")

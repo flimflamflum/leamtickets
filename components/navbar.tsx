@@ -78,18 +78,6 @@ export function Navbar() {
             {/* Venue quick filters */}
             <div className="hidden md:flex items-center gap-2">
               <button
-                onClick={() => handleVenueFilter("SMACK")}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200",
-                  "bg-purple-500/10 text-purple-600 hover:bg-purple-500 hover:text-white",
-                  "dark:bg-purple-500/20 dark:text-purple-300 dark:hover:bg-purple-500 dark:hover:text-white",
-                  "border border-purple-200 dark:border-purple-800",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
-                )}
-              >
-                Smack
-              </button>
-              <button
                 onClick={() => handleVenueFilter("NEON")}
                 className={cn(
                   "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200",
@@ -100,6 +88,18 @@ export function Navbar() {
                 )}
               >
                 Neon
+              </button>
+              <button
+                onClick={() => handleVenueFilter("SMACK")}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200",
+                  "bg-purple-500/10 text-purple-600 hover:bg-purple-500 hover:text-white",
+                  "dark:bg-purple-500/20 dark:text-purple-300 dark:hover:bg-purple-500 dark:hover:text-white",
+                  "border border-purple-200 dark:border-purple-800",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+                )}
+              >
+                Smack
               </button>
               <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">
                 Want another venue listed? Message us!
@@ -226,16 +226,16 @@ export function Navbar() {
           {/* Mobile venue filters */}
           <div className="flex gap-2 pb-3 mb-2 border-b border-border/50">
             <button
-              onClick={() => handleVenueFilter("SMACK")}
-              className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-purple-500 text-white hover:bg-purple-600 transition-colors"
-            >
-              Smack
-            </button>
-            <button
               onClick={() => handleVenueFilter("NEON")}
               className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-cyan-500 text-white hover:bg-cyan-600 transition-colors"
             >
               Neon
+            </button>
+            <button
+              onClick={() => handleVenueFilter("SMACK")}
+              className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-purple-500 text-white hover:bg-purple-600 transition-colors"
+            >
+              Smack
             </button>
           </div>
 

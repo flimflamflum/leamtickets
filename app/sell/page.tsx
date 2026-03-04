@@ -124,8 +124,8 @@ export default function SellPage() {
             error={errors.venue?.message}
             placeholder="Select a venue"
             options={[
-              { value: "SMACK", label: "Smack – Leamington Spa" },
               { value: "NEON", label: "Neon – Leamington Spa" },
+              { value: "SMACK", label: "Smack – Leamington Spa" },
             ]}
             {...register("venue")}
           />
