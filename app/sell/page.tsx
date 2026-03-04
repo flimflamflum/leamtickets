@@ -198,6 +198,7 @@ export default function SellPage() {
 
         {/* Ticket image */}
         <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-4">
+          <p className="text-sm text-muted-foreground">Please take a high-quality screenshot of the entire ticket. If the image isn&apos;t good enough you may not receive your payout.</p>
           <div>
             <h2 className="font-semibold text-foreground">Ticket image</h2>
             <p className="text-xs text-muted-foreground mt-0.5">

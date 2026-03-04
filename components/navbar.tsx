@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles, ChevronDown, Sun, Moon } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles, ChevronDown, Sun, Moon, Ticket } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +15,7 @@ export function Navbar() {
   const { resolvedTheme, setTheme } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -160,11 +161,23 @@ export function Navbar() {
                         className={cn(
                           "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors",
                           "text-foreground hover:bg-secondary",
-                          isActive("/dashboard") && "bg-primary/10 text-primary"
+                          isActive("/dashboard") && searchParams.get("tab") !== "tickets" && "bg-primary/10 text-primary"
                         )}
                       >
                         <LayoutDashboard className="w-4 h-4" />
                         Dashboard
+                      </Link>
+                      <Link
+                        href="/dashboard?tab=tickets"
+                        onClick={() => setUserMenuOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors",
+                          "text-foreground hover:bg-secondary",
+                          pathname === "/dashboard" && searchParams.get("tab") === "tickets" && "bg-primary/10 text-primary"
+                        )}
+                      >
+                        <Ticket className="w-4 h-4" />
+                        Your Tickets
                       </Link>
                       <button
                         onClick={() => { setTheme(isDark ? "light" : "dark"); setUserMenuOpen(false); }}
@@ -272,6 +285,14 @@ export function Navbar() {
                 >
                   <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
                   Dashboard
+                </Link>
+                <Link
+                  href="/dashboard?tab=tickets"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+                >
+                  <Ticket className="w-4 h-4 text-muted-foreground" />
+                  Your Tickets
                 </Link>
                 <button
                   onClick={() => { setTheme(isDark ? "light" : "dark"); setMobileOpen(false); }}

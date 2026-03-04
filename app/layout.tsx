@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { SoldTicketsPopup } from "@/components/sold-tickets-popup";
@@ -34,7 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <SessionProvider>
             <SoldTicketsPopup />
-            <Navbar />
+            <Suspense>
+              <Navbar />
+            </Suspense>
             <main className="flex-1">{children}</main>
             <Footer />
           </SessionProvider>

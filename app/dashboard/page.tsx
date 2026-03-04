@@ -7,7 +7,12 @@ import { Plus, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardTabs } from "./dashboard-tabs";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/login?callbackUrl=/dashboard");
 
@@ -83,7 +88,11 @@ export default async function DashboardPage() {
       </div>
 
       {/* Tabs: Your listings | Your tickets */}
-      <DashboardTabs listings={user.tickets} boughtTickets={ticketsBought} />
+      <DashboardTabs
+        listings={user.tickets}
+        boughtTickets={ticketsBought}
+        initialTab={tab === "tickets" ? "tickets" : "listings"}
+      />
     </div>
   );
 }
