@@ -141,9 +141,8 @@ export default function SellPage() {
 
           <Input
             id="ticketType"
-            label="Ticket type"
-            placeholder="e.g. Standard, VIP, Student"
-            required
+            label="Ticket type (optional)"
+            placeholder="e.g. Standard, Fast Track"
             error={errors.ticketType?.message}
             {...register("ticketType")}
           />
@@ -175,7 +174,17 @@ export default function SellPage() {
                   <span className="font-medium">{formatPrice(fees.resalePrice)}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
-                  <span>Platform fee ({PLATFORM_FEE_PERCENT}%)</span>
+                  <span className="flex items-center gap-1">
+                    Platform fee ({PLATFORM_FEE_PERCENT}%)
+                    <span className="group/info relative inline-flex">
+                      <span className="inline-flex h-4 w-4 shrink-0 cursor-help items-center justify-center rounded-full border border-current text-[10px] font-bold text-muted-foreground hover:text-foreground">
+                        i
+                      </span>
+                      <span className="pointer-events-none absolute bottom-full left-1/2 z-[100] mb-1.5 w-64 -translate-x-1/2 rounded-lg border border-border bg-black px-3 py-2 text-xs font-medium leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 group-hover/info:opacity-100 dark:bg-white dark:text-black dark:border-neutral-300">
+                        This allows us to keep running this website. We aren&apos;t really aiming for profits and will decrease this fee over time as we get more volume.
+                      </span>
+                    </span>
+                  </span>
                   <span className="text-destructive">−{formatPrice(fees.platformFee)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-foreground pt-2 border-t border-border">

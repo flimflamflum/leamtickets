@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { SoldTicketsPopup } from "@/components/sold-tickets-popup";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange={false}
         >
           <SessionProvider>
+            <SoldTicketsPopup />
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />

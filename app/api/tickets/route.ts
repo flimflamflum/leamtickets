@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
         venue,
         eventName,
         eventDate: new Date(eventDate),
-        ticketType,
+        ticketType: ticketType ?? null,
         resalePrice: resalePrice ?? 0,
         imageUrl,
         description: description ?? null,

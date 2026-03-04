@@ -12,7 +12,7 @@ export interface CreateTicketInput {
   venue: Venue;
   eventName: string;
   eventDate: string;
-  ticketType: string;
+  ticketType?: string;
   originalPrice: number;
   resalePrice: number;
   imageUrl: string;
@@ -33,7 +33,7 @@ export interface FeeBreakdown {
   platformFeePercent: number;
 }
 
-export const PLATFORM_FEE_PERCENT = 10;
+export const PLATFORM_FEE_PERCENT = 15;
 
 export function calculateFees(resalePrice: number): FeeBreakdown {
   const platformFee = Math.round(resalePrice * (PLATFORM_FEE_PERCENT / 100) * 100) / 100;

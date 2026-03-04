@@ -178,9 +178,20 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                     Sell a Ticket
                   </Button>
                 </Link>
-                <Link href="#tickets">
-                  <Button size="lg" variant="outline" className="rounded-xl px-8 text-base w-full sm:w-auto">
-                    Browse Tickets
+                <Link href="/?venue=NEON#tickets">
+                  <Button
+                    size="lg"
+                    className="rounded-xl px-8 text-base w-full sm:w-auto bg-cyan-500 hover:bg-cyan-600 text-white border-0 shadow-lg shadow-cyan-500/25 dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-white"
+                  >
+                    Buy Neon
+                  </Button>
+                </Link>
+                <Link href="/?venue=SMACK#tickets">
+                  <Button
+                    size="lg"
+                    className="rounded-xl px-8 text-base w-full sm:w-auto bg-purple-500 hover:bg-purple-600 text-white border-0 shadow-lg shadow-purple-500/25 dark:bg-purple-500 dark:hover:bg-purple-600 dark:text-white"
+                  >
+                    Buy Smack
                   </Button>
                 </Link>
               </div>

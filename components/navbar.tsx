@@ -51,6 +51,24 @@ export function Navbar() {
               href="/"
               className="flex items-center gap-2.5 font-bold text-foreground hover:opacity-80 transition-opacity"
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={36}
+                height={36}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-ticket shrink-0 text-muted-foreground"
+                aria-hidden
+              >
+                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                <path d="M13 5v2" />
+                <path d="M13 17v2" />
+                <path d="M13 11v2" />
+              </svg>
               <span className="text-lg hidden sm:block">LeamTickets</span>
             </Link>
 
@@ -58,7 +76,7 @@ export function Navbar() {
             <div className="hidden md:block w-px h-6 bg-border mx-1" />
 
             {/* Venue quick filters */}
-            <div className="hidden md:flex items-center gap-1.5">
+            <div className="hidden md:flex items-center gap-2">
               <button
                 onClick={() => handleVenueFilter("SMACK")}
                 className={cn(
@@ -83,13 +101,22 @@ export function Navbar() {
               >
                 Neon
               </button>
+              <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">
+                Want another venue listed? Message us!
+              </span>
             </div>
           </div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
-              href="/"
+              href="/#tickets"
+              onClick={(e) => {
+                if (pathname === "/") {
+                  e.preventDefault();
+                  document.getElementById("tickets")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }}
               className={cn(
                 "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
                 isActive("/")
@@ -213,8 +240,14 @@ export function Navbar() {
           </div>
 
           <Link
-            href="/"
-            onClick={() => setMobileOpen(false)}
+            href="/#tickets"
+            onClick={(e) => {
+              setMobileOpen(false);
+              if (pathname === "/") {
+                e.preventDefault();
+                document.getElementById("tickets")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            }}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary transition-colors"
           >
             <Sparkles className="w-4 h-4 text-muted-foreground" />

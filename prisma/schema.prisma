@@ -38,7 +38,7 @@ model Ticket {
   venue       Venue
   eventName   String
   eventDate   DateTime
-  ticketType  String
+  ticketType  String?
   resalePrice Float
   imageUrl    String
   description String?

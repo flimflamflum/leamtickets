@@ -24,6 +24,14 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
   const getVenueTitle = (venue: string) =>
     venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
 
+  const isToday = (date: Date | string) => {
+    const d = new Date(date);
+    const today = new Date();
+    return d.getFullYear() === today.getFullYear() &&
+      d.getMonth() === today.getMonth() &&
+      d.getDate() === today.getDate();
+  };
+
   const handleSaveImage = async (imageUrl: string, venue: string) => {
     const title = getVenueTitle(venue);
     try {
@@ -125,7 +133,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                           {getVenueTitle(ticket.venue)}
                         </h3>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {formatDateShort(ticket.eventDate)} · {ticket.ticketType}
+                          {formatDateShort(ticket.eventDate)}{ticket.ticketType ? ` · ${ticket.ticketType}` : ""}
                         </p>
                       </div>
 
@@ -184,10 +192,16 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
             </div>
           ) : (
             <div className="space-y-3">
-              {boughtTickets.map((ticket) => (
+              {boughtTickets.map((ticket) => {
+                const today = isToday(ticket.eventDate);
+                return (
                 <div
                   key={ticket.id}
-                  className="bg-card rounded-2xl border border-border shadow-sm p-4 flex gap-4"
+                  className={`rounded-2xl border shadow-sm p-4 flex gap-4 ${
+                    today
+                      ? "bg-green-500/10 dark:bg-green-500/20 border-green-500/50 dark:border-green-500/40"
+                      : "bg-card border-border"
+                  }`}
                 >
                   {/* Show actual ticket image for bought tickets */}
                   <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
@@ -207,12 +221,17 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                         <div className="flex items-center gap-2 flex-wrap">
                           <VenueBadge venue={ticket.venue} />
                           <Badge variant="available">Yours</Badge>
+                          {today && (
+                            <span className="px-2 py-0.5 rounded-lg text-xs font-bold bg-green-500 text-white">
+                              Today!
+                            </span>
+                          )}
                         </div>
                         <h3 className="font-semibold text-foreground text-sm mt-1.5 truncate">
                           {getVenueTitle(ticket.venue)}
                         </h3>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {formatDateShort(ticket.eventDate)} · {ticket.ticketType}
+                          {formatDateShort(ticket.eventDate)}{ticket.ticketType ? ` · ${ticket.ticketType}` : ""}
                         </p>
                       </div>
 
@@ -239,7 +258,8 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>

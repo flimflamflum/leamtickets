@@ -90,7 +90,7 @@ export function TicketCard({ ticket, currentUserId }: TicketCardProps) {
             <div className="w-5 h-5 rounded-md bg-muted flex items-center justify-center">
               <Tag className="w-3 h-3" />
             </div>
-            <span className="truncate">{ticket.ticketType}</span>
+            <span className="truncate">{ticket.ticketType ?? "—"}</span>
           </div>
         </div>
 

@@ -26,7 +26,7 @@ interface TicketSoldEmailProps {
   sellerName?: string | null;
   eventName: string;
   venue: string;
-  ticketType: string;
+  ticketType?: string | null;
   resalePrice: number;
 }
 
@@ -51,7 +51,7 @@ export async function sendTicketSoldEmail({
         
         <div style="background: #f9fafb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
           <p style="margin: 0 0 8px 0; font-weight: 600; color: #111827;">${eventName} @ ${venue}</p>
-          <p style="margin: 0; color: #6b7280;">${ticketType}</p>
+          ${ticketType ? `<p style="margin: 0; color: #6b7280;">${ticketType}</p>` : ""}
         </div>
 
         <div style="border-radius: 12px; border: 1px solid #e5e7eb; padding: 20px; margin-bottom: 24px;">
@@ -73,7 +73,7 @@ interface PurchaseConfirmationEmailProps {
   buyerName?: string | null;
   eventName: string;
   venue: string;
-  ticketType: string;
+  ticketType?: string | null;
   resalePrice: number;
   imageUrl: string;
 }
@@ -137,7 +137,7 @@ export async function sendPurchaseConfirmationEmail({
         
         <div style="background: #f9fafb; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
           <p style="margin: 0 0 8px 0; font-weight: 600; color: #111827;">${eventName} @ ${venue}</p>
-          <p style="margin: 0 0 8px 0; color: #6b7280;">${ticketType}</p>
+          ${ticketType ? `<p style="margin: 0 0 8px 0; color: #6b7280;">${ticketType}</p>` : ""}
           <p style="margin: 0; font-weight: 700; color: #111827;">£${resalePrice.toFixed(2)}</p>
         </div>
 
