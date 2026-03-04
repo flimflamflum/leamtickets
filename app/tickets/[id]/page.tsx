@@ -74,7 +74,7 @@ export default async function TicketDetailPage({
             <div className="flex items-center gap-2 mb-2">
               <VenueBadge venue={ticket.venue} />
               {isSeller && <Badge variant="default">Your listing</Badge>}
-              {isSold && <Badge variant="sold">Ticket sold</Badge>}
+              {isSold && <Badge variant="sold">{isBuyer ? "Bought by you" : "Ticket sold"}</Badge>}
             </div>
             <h1 className="text-2xl font-bold text-foreground">
               {ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket"}
@@ -121,6 +121,7 @@ export default async function TicketDetailPage({
               isSold={isSold}
               isLoggedIn={!!session?.user}
               isSeller={isSeller}
+              isBuyer={isBuyer}
             />
           </div>
 

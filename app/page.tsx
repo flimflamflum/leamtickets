@@ -162,6 +162,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 <span className="text-purple-500">Smack</span>
               </h1>
 
+              <p className="text-xl sm:text-2xl font-semibold text-foreground mb-6">
+                Tickets for sale: {totalTickets}
+              </p>
+
               {/* Subheading */}
               <p className="text-lg text-muted-foreground leading-relaxed">
                 We all love Leamington spa, especially Smack and Neon👀👀 Unfortunately they almost always sell out which is why we built this marketplace where you can securely buy and sell tickets.

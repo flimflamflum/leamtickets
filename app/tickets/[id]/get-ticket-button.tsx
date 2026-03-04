@@ -11,6 +11,7 @@ interface GetTicketButtonProps {
   isSold: boolean;
   isLoggedIn?: boolean;
   isSeller?: boolean;
+  isBuyer?: boolean;
 }
 
 export function GetTicketButton({
@@ -18,6 +19,7 @@ export function GetTicketButton({
   isSold,
   isLoggedIn = false,
   isSeller = false,
+  isBuyer = false,
 }: GetTicketButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +66,7 @@ export function GetTicketButton({
       <div className="text-center py-3 rounded-xl bg-green-500/10 border border-green-200 dark:border-green-800 text-sm font-semibold text-green-600 dark:text-green-400">
         <div className="flex items-center justify-center gap-2">
           <Check className="w-4 h-4" />
-          Ticket sold
+          {isBuyer ? "Bought by you" : "Ticket sold"}
         </div>
       </div>
     );

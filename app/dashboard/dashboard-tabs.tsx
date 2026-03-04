@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, ExternalLink, Clock, Ticket, Download } from "lucide-react";
+import { Plus, ExternalLink, Clock, Ticket, Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VenueBadge, Badge } from "@/components/ui/badge";
 import { formatPrice, formatDateShort } from "@/lib/utils";
@@ -13,10 +13,25 @@ import type { Ticket as TicketType } from "@prisma/client";
 interface DashboardTabsProps {
   listings: TicketType[];
   boughtTickets: TicketType[];
+  initialTab?: "listings" | "tickets";
 }
 
-export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
-  const [tab, setTab] = useState<"listings" | "tickets">("listings");
+export function DashboardTabs({ listings, boughtTickets, initialTab = "listings" }: DashboardTabsProps) {
+  const [tab, setTab] = useState<"listings" | "tickets">(initialTab);
+  const [imageOverlayUrl, setImageOverlayUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab]);
+
+  useEffect(() => {
+    if (!imageOverlayUrl) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setImageOverlayUrl(null);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [imageOverlayUrl]);
 
   const available = listings.filter((t) => t.status === "AVAILABLE");
   const sold = listings.filter((t) => t.status === "SOLD");
@@ -204,7 +219,11 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                   }`}
                 >
                   {/* Show actual ticket image for bought tickets */}
-                  <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
+                  <button
+                    type="button"
+                    onClick={() => setImageOverlayUrl(ticket.imageUrl)}
+                    className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-muted cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  >
                     <Image
                       src={ticket.imageUrl}
                       alt={getVenueTitle(ticket.venue)}
@@ -213,7 +232,7 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
                       sizes="96px"
                       unoptimized={ticket.imageUrl.startsWith("data:")}
                     />
-                  </div>
+                  </button>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
@@ -262,6 +281,29 @@ export function DashboardTabs({ listings, boughtTickets }: DashboardTabsProps) {
               })}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Full-size image overlay */}
+      {imageOverlayUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+          onClick={() => setImageOverlayUrl(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setImageOverlayUrl(null)}
+            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <img
+            src={imageOverlayUrl}
+            alt="Ticket"
+            className="max-w-full max-h-full object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
     </>
