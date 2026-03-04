@@ -45,28 +45,38 @@ export async function POST(
 
     const venue = venueLabel(ticket.venue);
     const buyerEmail = session.user.email ?? "";
+    const sellerEmail = ticket.seller.email ?? "";
 
-    Promise.all([
-      buyerEmail
-        ? sendPurchaseConfirmationEmail({
-            buyerEmail,
-            buyerName: session.user.name,
-            eventName: ticket.eventName,
-            venue,
-            ticketType: ticket.ticketType,
-            resalePrice: ticket.resalePrice,
-            imageUrl: ticket.imageUrl,
-          })
-        : Promise.resolve(),
-      sendTicketSoldEmail({
-        sellerEmail: ticket.seller.email,
-        sellerName: ticket.seller.name,
-        eventName: ticket.eventName,
-        venue,
-        ticketType: ticket.ticketType,
-        resalePrice: ticket.resalePrice,
-      }),
-    ]).catch((err) => console.error("Email send failed:", err));
+    const emailTasks: Promise<void>[] = [];
+
+    if (buyerEmail) {
+      emailTasks.push(
+        sendPurchaseConfirmationEmail({
+          buyerEmail,
+          buyerName: session.user.name,
+          eventName: ticket.eventName,
+          venue,
+          ticketType: ticket.ticketType,
+          resalePrice: ticket.resalePrice,
+          imageUrl: ticket.imageUrl,
+        }).catch((err) => console.error("Buyer confirmation email failed:", err))
+      );
+    }
+
+    if (sellerEmail) {
+      emailTasks.push(
+        sendTicketSoldEmail({
+          sellerEmail,
+          sellerName: ticket.seller.name,
+          eventName: ticket.eventName,
+          venue,
+          ticketType: ticket.ticketType,
+          resalePrice: ticket.resalePrice,
+        }).catch((err) => console.error("Seller notification email failed:", err))
+      );
+    }
+
+    void Promise.all(emailTasks);
 
     return NextResponse.json({ success: true });
   } catch (error) {
