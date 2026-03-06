@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Calendar, Tag, ArrowLeft, User, Info, MapPin } from "lucide-react";
+import { Calendar, Tag, ArrowLeft, User, Info, MapPin, Check } from "lucide-react";
 import { VenueBadge, Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
 import type { TicketWithSeller } from "@/types";
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     select: { eventName: true, venue: true },
   });
   if (!ticket) return { title: "Ticket not found – LeamTickets" };
-  const title = ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
+  const title = ticket.venue === "SMACK" ? "Smack Q-Jump" : "Neon Priority Entry";
   return {
     title: `${title} – LeamTickets`,
     description: `Buy a resale ticket for ${title}.`,
@@ -26,10 +26,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function TicketDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ purchased?: string }>;
 }) {
   const { id } = await params;
+  const { purchased } = await searchParams;
   const session = await auth();
 
   const ticket = await prisma.ticket.findUnique({
@@ -58,6 +61,15 @@ export default async function TicketDetailPage({
         Back to listings
       </Link>
 
+      {purchased === "true" && isBuyer && (
+        <div className="mb-6 flex items-center gap-3 bg-green-500/10 dark:bg-green-500/20 border border-green-500/30 dark:border-green-500/40 rounded-xl px-4 py-3">
+          <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+          <p className="text-sm font-medium text-green-700 dark:text-green-300">
+            Payment successful! Your ticket is now available below and has been sent to your email.
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3">
           <TicketImage
@@ -77,7 +89,7 @@ export default async function TicketDetailPage({
               {isSold && <Badge variant="sold">{isBuyer ? "Bought by you" : "Ticket sold"}</Badge>}
             </div>
             <h1 className="text-2xl font-bold text-foreground">
-              {ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket"}
+              {ticket.venue === "SMACK" ? "Smack Q-Jump" : "Neon Priority Entry"}
             </h1>
           </div>
 
@@ -122,6 +134,7 @@ export default async function TicketDetailPage({
               isLoggedIn={!!session?.user}
               isSeller={isSeller}
               isBuyer={isBuyer}
+              resalePrice={ticket.resalePrice}
             />
           </div>
 

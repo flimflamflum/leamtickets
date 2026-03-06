@@ -3,11 +3,12 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { TicketCard, TicketCardSkeleton } from "@/components/ticket-card";
 import { TicketFilters } from "@/components/ticket-filters";
-import { Ticket, Zap } from "lucide-react";
+import { Ticket, Zap, PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Venue } from "@prisma/client";
 import type { TicketWithSeller } from "@/types";
+import { getDayTheme } from "@/lib/day-theme";
 
 interface HomePageProps {
   searchParams: Promise<{
@@ -133,10 +134,25 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     ? 5.56
     : weeklyAvgResult._avg.resalePrice;
 
+  const dayTheme = getDayTheme();
+
   return (
     <div className="min-h-screen">
+      {/* Day Theme Banner */}
+      <div className="day-theme-banner items-center justify-center gap-2 border-b px-4 py-2.5 text-center text-sm font-medium">
+        <PartyPopper className="w-4 h-4 flex-shrink-0" />
+        <span>
+          {dayTheme === "neon"
+            ? "It's Neon Friday! The site is rocking the Neon colourway tonight."
+            : dayTheme === "smack"
+              ? "It's Smack Tuesday! The site is decked out in Smack colours tonight."
+              : ""}
+        </span>
+        <PartyPopper className="w-4 h-4 flex-shrink-0" />
+      </div>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden day-glow">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/50 to-background dark:from-background dark:via-muted/30 dark:to-background" />
 
@@ -154,7 +170,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
             {/* Main heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
-              Buy and Sell Tickets for{" "}
+              Buy Tickets for{" "}
               <span className="text-cyan-500">Neon</span>{" "}
               and{" "}
               <span className="text-purple-500">Smack</span>
@@ -162,10 +178,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
             <p className="text-xl sm:text-2xl font-semibold text-foreground">
               Tickets for sale: {totalTickets}
-            </p>
-
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              We all love Leamington spa, especially Smack and Neon👀👀 Unfortunately they almost always sell out which is why we built this marketplace where you can securely buy and sell tickets.
             </p>
           </div>
         </div>
@@ -176,21 +188,21 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                <span className="text-lg font-bold text-purple-600 dark:text-purple-400">S</span>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">{smackCount}</p>
-                <p className="text-xs text-muted-foreground">Smack tickets</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center">
                 <span className="text-lg font-bold text-cyan-600 dark:text-cyan-400">N</span>
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{neonCount}</p>
                 <p className="text-xs text-muted-foreground">Neon tickets</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                <span className="text-lg font-bold text-purple-600 dark:text-purple-400">S</span>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{smackCount}</p>
+                <p className="text-xs text-muted-foreground">Smack tickets</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -271,7 +283,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       {/* CTA Section */}
       <section className="py-12 sm:py-16 border-t border-border/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="relative rounded-3xl bg-gradient-to-br from-primary to-muted-foreground p-8 sm:p-12 lg:p-16 overflow-hidden">
+          <div className="relative rounded-3xl bg-gradient-to-br from-primary to-muted-foreground p-8 sm:p-12 lg:p-16 overflow-hidden day-border-glow border">
             {/* Decorative pattern */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute inset-0 ticket-pattern" />

@@ -37,7 +37,7 @@ export function DashboardTabs({ listings, boughtTickets, initialTab = "listings"
   const sold = listings.filter((t) => t.status === "SOLD");
 
   const getVenueTitle = (venue: string) =>
-    venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
+    venue === "SMACK" ? "Smack Q-Jump" : "Neon Priority Entry";
 
   const isToday = (date: Date | string) => {
     const d = new Date(date);

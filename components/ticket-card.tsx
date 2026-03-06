@@ -4,6 +4,7 @@ import { Calendar, Tag, MapPin } from "lucide-react";
 import { VenueBadge } from "@/components/ui/badge";
 import { formatPrice, formatDateShort } from "@/lib/utils";
 import type { TicketWithSeller } from "@/types";
+import { getDayTheme } from "@/lib/day-theme";
 import { cn } from "@/lib/utils";
 
 const VENUE_IMAGES: Record<string, string> = {
@@ -25,11 +26,18 @@ export function TicketCard({ ticket, currentUserId }: TicketCardProps) {
   const isOwnListing = currentUserId != null && ticket.seller.id === currentUserId;
   const imageSrc = VENUE_IMAGES[ticket.venue] ?? "/smack1.jpeg";
   const isFree = ticket.resalePrice === 0;
+  const dayTheme = getDayTheme();
+  const isThemeVenue =
+    (dayTheme === "neon" && ticket.venue === "NEON") ||
+    (dayTheme === "smack" && ticket.venue === "SMACK");
 
   return (
     <Link
       href={`/tickets/${ticket.id}`}
-      className="group block bg-card rounded-2xl border border-border/60 overflow-hidden card-lift"
+      className={cn(
+        "group block bg-card rounded-2xl border overflow-hidden card-lift",
+        isThemeVenue ? "day-border-glow border-2" : "border-border/60"
+      )}
     >
       {/* Image Container */}
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -76,7 +84,7 @@ export function TicketCard({ ticket, currentUserId }: TicketCardProps) {
       <div className="p-4">
         {/* Meta info */}
         <h3 className="font-bold text-foreground text-sm mb-2">
-          {ticket.venue === "SMACK" ? "Smack Ticket" : "Neon Ticket"}
+          {ticket.venue === "SMACK" ? "Smack Q-Jump" : "Neon Priority Entry"}
         </h3>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">

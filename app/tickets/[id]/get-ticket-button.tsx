@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Gift, Trash2, Check } from "lucide-react";
+import { Gift, Trash2, Check, CreditCard } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface GetTicketButtonProps {
   ticketId: string;
@@ -12,6 +13,7 @@ interface GetTicketButtonProps {
   isLoggedIn?: boolean;
   isSeller?: boolean;
   isBuyer?: boolean;
+  resalePrice: number;
 }
 
 export function GetTicketButton({
@@ -20,6 +22,7 @@ export function GetTicketButton({
   isLoggedIn = false,
   isSeller = false,
   isBuyer = false,
+  resalePrice,
 }: GetTicketButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -27,19 +30,45 @@ export function GetTicketButton({
   const [showDelistConfirm, setShowDelistConfirm] = useState(false);
   const [isDelisting, setIsDelisting] = useState(false);
 
+  const isFree = resalePrice <= 0;
+
   const handleGetTicket = async () => {
     setIsLoading(true);
     setError(null);
+
     try {
-      const res = await fetch(`/api/tickets/${ticketId}/buy`, { method: "POST" });
-      const json = await res.json();
+      if (isFree) {
+        const res = await fetch(`/api/tickets/${ticketId}/buy`, {
+          method: "POST",
+        });
+        const json = await res.json();
 
-      if (!res.ok) {
-        setError(json.error ?? "Failed to claim ticket. Please try again.");
-        return;
+        if (!res.ok) {
+          setError(json.error ?? "Failed to claim ticket. Please try again.");
+          return;
+        }
+
+        router.refresh();
+      } else {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ticketId }),
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+          setError(json.error ?? "Failed to start checkout. Please try again.");
+          return;
+        }
+
+        if (json.url) {
+          window.location.href = json.url;
+          return;
+        }
+
+        setError("Failed to create checkout session.");
       }
-
-      router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -117,7 +146,7 @@ export function GetTicketButton({
     return (
       <Link href={`/auth/login?callbackUrl=/tickets/${ticketId}`} className="block">
         <Button size="lg" className="w-full shine-effect">
-          Log in to claim
+          Log in to {isFree ? "claim" : "buy"}
         </Button>
       </Link>
     );
@@ -132,8 +161,17 @@ export function GetTicketButton({
         size="lg"
         className="w-full shine-effect"
       >
-        <Gift className="w-4 h-4" />
-        Get ticket (free)
+        {isFree ? (
+          <>
+            <Gift className="w-4 h-4" />
+            Claim ticket (free)
+          </>
+        ) : (
+          <>
+            <CreditCard className="w-4 h-4" />
+            Buy ticket — {formatPrice(resalePrice)}
+          </>
+        )}
       </Button>
       {error && <p className="text-xs text-destructive text-center">{error}</p>}
     </div>

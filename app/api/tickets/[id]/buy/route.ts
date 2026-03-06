@@ -38,6 +38,13 @@ export async function POST(
       );
     }
 
+    if (ticket.resalePrice > 0) {
+      return NextResponse.json(
+        { error: "This ticket requires payment. Please use the checkout flow." },
+        { status: 400 }
+      );
+    }
+
     await prisma.ticket.update({
       where: { id },
       data: { status: "SOLD", buyerId: session.user.id },
@@ -76,7 +83,7 @@ export async function POST(
       );
     }
 
-    void Promise.all(emailTasks);
+    await Promise.all(emailTasks);
 
     return NextResponse.json({ success: true });
   } catch (error) {

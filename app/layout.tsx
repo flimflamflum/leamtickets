@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { SoldTicketsPopup } from "@/components/sold-tickets-popup";
 import { ThemeProvider } from "@/components/theme-provider";
+import { DayThemeProvider } from "@/components/day-theme-provider";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
@@ -33,14 +34,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange={false}
         >
-          <SessionProvider>
-            <SoldTicketsPopup />
-            <Suspense>
-              <Navbar />
-            </Suspense>
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </SessionProvider>
+          <DayThemeProvider>
+            <SessionProvider>
+              <SoldTicketsPopup />
+              <Suspense>
+                <Navbar />
+              </Suspense>
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </SessionProvider>
+          </DayThemeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -101,7 +101,7 @@ export default function SellPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground">List a ticket</h1>
         <p className="mt-1.5 text-muted-foreground">
-          List your ticket for free. Buyers can claim it at no cost.
+          List your ticket in under a minute. Set a price or list it for free.
         </p>
       </div>
 
@@ -124,8 +124,8 @@ export default function SellPage() {
             error={errors.venue?.message}
             placeholder="Select a venue"
             options={[
-              { value: "NEON", label: "Neon – Leamington Spa" },
-              { value: "SMACK", label: "Smack – Leamington Spa" },
+              { value: "NEON", label: "Neon Priority Entry – Leamington Spa" },
+              { value: "SMACK", label: "Smack Q-Jump – Leamington Spa" },
             ]}
             {...register("venue")}
           />
@@ -155,7 +155,7 @@ export default function SellPage() {
           <Input
             id="resalePrice"
             type="number"
-            label="Resale price (£)"
+            label="Resale price (£) — recommended range £5 to £15"
             placeholder="0.00"
             step="0.01"
             min="0"

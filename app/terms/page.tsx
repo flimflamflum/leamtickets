@@ -19,7 +19,7 @@ export default function TermsPage() {
       </Link>
 
       <h1 className="text-3xl font-bold text-foreground mb-2">Terms of Service</h1>
-      <p className="text-muted-foreground text-sm mb-8">Last updated: March 2025</p>
+      <p className="text-muted-foreground text-sm mb-8">Last updated: March 2026</p>
 
       <div className="prose prose-gray dark:prose-invert max-w-none space-y-6 text-sm leading-relaxed">
         <section>
@@ -42,23 +42,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">3. No Liability for Scams or Fraud</h2>
-          <p className="text-foreground mb-2">
-            <strong>LeamTickets is not liable for scams, fraud, counterfeit tickets, non-delivery,
-            event cancellations, or any loss arising from transactions between users.</strong> All
-            purchases and sales are at your own risk. We do not guarantee the authenticity,
-            validity, or delivery of any ticket listed on the Platform.
-          </p>
-          <p className="text-foreground">
-            While we are not liable, we take user safety seriously. <strong>We will investigate all
-            reported scams and fraudulent activity.</strong> If you believe you have been scammed,
-            please contact us at leamtickets@gmail.com with details. We may take action against accounts involved in fraud,
-            including suspension or removal, and we will cooperate with authorities where appropriate.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">4. User Responsibilities</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">3. User Responsibilities</h2>
           <p className="text-foreground mb-2">As a user, you agree to:</p>
           <ul className="list-disc pl-6 space-y-1 text-foreground">
             <li>Provide accurate information when listing or claiming tickets</li>
@@ -71,7 +55,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">5. Seller Payouts & Cashout</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">4. Seller Payouts & Cashout</h2>
           <p className="text-foreground">
             Sellers can cash out their earnings <strong>48 hours after the event date listed</strong> on
             their ticket. This delay is in place to protect buyers from scams and to allow time for
@@ -81,7 +65,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">6. Prohibited Conduct</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">5. Prohibited Conduct</h2>
           <p className="text-foreground mb-2">You must not:</p>
           <ul className="list-disc pl-6 space-y-1 text-foreground">
             <li>List tickets you do not own or have the right to sell</li>
@@ -94,7 +78,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">7. Disclaimer of Warranties</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">6. Disclaimer of Warranties</h2>
           <p className="text-foreground">
             The Platform is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
             express or implied. We do not warrant that the Platform will be uninterrupted, error-free,
@@ -103,7 +87,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">8. Limitation of Liability</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">7. Limitation of Liability</h2>
           <p className="text-foreground">
             To the fullest extent permitted by law, LeamTickets, its operators, and affiliates
             shall not be liable for any indirect, incidental, special, consequential, or punitive
@@ -114,7 +98,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">9. Dispute Resolution</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">8. Dispute Resolution</h2>
           <p className="text-foreground">
             Disputes between buyers and sellers are solely between those users. We encourage you to
             resolve issues directly. We may, at our discretion, provide assistance or mediation,
@@ -123,10 +107,26 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-2">10. Changes</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">9. Changes</h2>
           <p className="text-foreground">
             We may update these Terms at any time. Continued use of the Platform after changes
             constitutes acceptance of the updated Terms.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-foreground mb-2">10. No Liability for Scams or Fraud</h2>
+          <p className="text-foreground mb-2">
+            <strong>LeamTickets is not liable for scams, fraud, counterfeit tickets, non-delivery,
+            event cancellations, or any loss arising from transactions between users.</strong> All
+            purchases and sales are at your own risk. We do not guarantee the authenticity,
+            validity, or delivery of any ticket listed on the Platform.
+          </p>
+          <p className="text-foreground">
+            While we are not liable, we take user safety seriously. <strong>We will investigate all
+            reported scams and fraudulent activity.</strong> If you believe you have been scammed,
+            please contact us at leamtickets@gmail.com with details. We may take action against accounts involved in fraud,
+            including suspension or removal, and we will cooperate with authorities where appropriate.
           </p>
         </section>
 

@@ -10,10 +10,8 @@ export type SafeUser = Omit<User, "password">;
 
 export interface CreateTicketInput {
   venue: Venue;
-  eventName: string;
   eventDate: string;
   ticketType?: string;
-  originalPrice: number;
   resalePrice: number;
   imageUrl: string;
   description?: string;

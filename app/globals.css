@@ -199,3 +199,126 @@ body {
 .dark .card-lift:hover {
   box-shadow: 0 12px 40px -12px hsl(var(--foreground) / 0.3);
 }
+
+/* ===== DAY THEMES ===== */
+
+/* --- Neon Friday (cyan/teal) --- */
+.day-neon {
+  --primary: 190 90% 45%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 190 90% 45%;
+  --accent: 190 40% 90%;
+  --accent-foreground: 190 60% 20%;
+}
+
+.day-neon.dark {
+  --primary: 190 90% 50%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 190 90% 50%;
+  --accent: 190 50% 18%;
+  --accent-foreground: 0 0% 100%;
+}
+
+.day-neon .gradient-hero {
+  background: linear-gradient(135deg, hsl(190 90% 45%) 0%, hsl(210 85% 50%) 100%);
+}
+
+.day-neon .day-theme-banner {
+  display: flex;
+  background: linear-gradient(135deg, hsl(190 90% 45% / 0.15) 0%, hsl(210 85% 50% / 0.15) 100%);
+  border-color: hsl(190 90% 45% / 0.3);
+  color: hsl(190 70% 30%);
+}
+
+.day-neon.dark .day-theme-banner {
+  background: linear-gradient(135deg, hsl(190 90% 45% / 0.2) 0%, hsl(210 85% 50% / 0.2) 100%);
+  border-color: hsl(190 90% 50% / 0.4);
+  color: hsl(190 80% 70%);
+}
+
+.day-neon .day-glow {
+  box-shadow: 0 0 60px -10px hsl(190 90% 50% / 0.15);
+}
+
+.day-neon.dark .day-glow {
+  box-shadow: 0 0 80px -10px hsl(190 90% 50% / 0.25);
+}
+
+.day-neon header {
+  border-bottom-color: hsl(190 90% 50% / 0.2);
+}
+
+.day-neon.dark header {
+  border-bottom-color: hsl(190 90% 50% / 0.3);
+}
+
+/* --- Smack Tuesday (purple/magenta) --- */
+.day-smack {
+  --primary: 275 75% 55%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 275 75% 55%;
+  --accent: 275 40% 92%;
+  --accent-foreground: 275 60% 20%;
+}
+
+.day-smack.dark {
+  --primary: 275 75% 60%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 275 75% 60%;
+  --accent: 275 50% 18%;
+  --accent-foreground: 0 0% 100%;
+}
+
+.day-smack .gradient-hero {
+  background: linear-gradient(135deg, hsl(275 70% 55%) 0%, hsl(295 65% 45%) 100%);
+}
+
+.day-smack .day-theme-banner {
+  display: flex;
+  background: linear-gradient(135deg, hsl(275 70% 55% / 0.15) 0%, hsl(295 65% 45% / 0.15) 100%);
+  border-color: hsl(275 70% 55% / 0.3);
+  color: hsl(275 60% 30%);
+}
+
+.day-smack.dark .day-theme-banner {
+  background: linear-gradient(135deg, hsl(275 70% 55% / 0.2) 0%, hsl(295 65% 45% / 0.2) 100%);
+  border-color: hsl(275 70% 60% / 0.4);
+  color: hsl(275 70% 75%);
+}
+
+.day-smack .day-glow {
+  box-shadow: 0 0 60px -10px hsl(275 70% 55% / 0.15);
+}
+
+.day-smack.dark .day-glow {
+  box-shadow: 0 0 80px -10px hsl(275 70% 55% / 0.25);
+}
+
+.day-smack header {
+  border-bottom-color: hsl(275 70% 55% / 0.2);
+}
+
+.day-smack.dark header {
+  border-bottom-color: hsl(275 70% 55% / 0.3);
+}
+
+/* Day theme banner (hidden by default, shown by day-theme classes) */
+.day-theme-banner {
+  display: none;
+}
+
+/* Subtle animated border glow for day themes */
+@keyframes day-border-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.day-neon .day-border-glow {
+  border-color: hsl(190 90% 50% / 0.4);
+  animation: day-border-pulse 3s ease-in-out infinite;
+}
+
+.day-smack .day-border-glow {
+  border-color: hsl(275 70% 55% / 0.4);
+  animation: day-border-pulse 3s ease-in-out infinite;
+}

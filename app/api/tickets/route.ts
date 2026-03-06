@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     const { venue, eventDate, ticketType, resalePrice, imageUrl, description } =
       parsed.data;
 
-    const eventName = venue === "SMACK" ? "Smack Ticket" : "Neon Ticket";
+    const eventName = venue === "SMACK" ? "Smack Q-Jump" : "Neon Priority Entry";
 
     const ticket = await prisma.ticket.create({
       data: {

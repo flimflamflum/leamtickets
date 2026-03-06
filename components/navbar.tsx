@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, LogOut, LayoutDashboard, Plus, Sparkles, ChevronDown, Sun, Moon, Ticket } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useDayTheme } from "@/components/day-theme-provider";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -19,6 +20,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const dayTheme = useDayTheme();
 
   const isActive = (href: string) => pathname === href;
   const isDark = resolvedTheme === "dark";
@@ -71,6 +73,20 @@ export function Navbar() {
                 <path d="M13 11v2" />
               </svg>
               <span className="text-lg hidden sm:block">LeamTickets</span>
+              {dayTheme && (
+                <span className={cn(
+                  "hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider",
+                  dayTheme === "neon"
+                    ? "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30"
+                    : "bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30"
+                )}>
+                  <span className={cn(
+                    "w-1.5 h-1.5 rounded-full animate-pulse",
+                    dayTheme === "neon" ? "bg-cyan-500" : "bg-purple-500"
+                  )} />
+                  {dayTheme === "neon" ? "Neon Night" : "Smack Night"}
+                </span>
+              )}
             </Link>
 
             {/* Divider */}

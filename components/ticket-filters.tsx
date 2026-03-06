@@ -49,91 +49,95 @@ export function TicketFilters() {
   const hasActiveFilters = venue || dayFilter || (sortBy && sortBy !== "price_asc");
 
   return (
-    <div className="bg-card rounded-2xl border border-border/60 shadow-sm p-4">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-          <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
-        </div>
-        <span className="text-sm font-semibold text-foreground">Filter & Sort</span>
-        {hasActiveFilters && (
-          <button
-            onClick={clearFilters}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
-          >
-            <X className="w-3.5 h-3.5" />
-            Clear all
-          </button>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {/* Venue filter */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Venue</label>
-          <select
-            value={venue}
-            onChange={(e) => updateParams({ venue: e.target.value })}
-            className={cn(
-              "rounded-xl border border-input bg-background px-3 py-2.5 text-sm text-foreground",
-              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
-              "transition-all duration-200",
-              "hover:border-muted-foreground/30"
-            )}
-          >
-            {VENUES.map((v) => (
-              <option key={v.value} value={v.value}>{v.label}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Day filter buttons */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Event day</label>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => updateParams({ dayFilter: dayFilter === "tuesday" ? "" : "tuesday" })}
-              className={cn(
-                "flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                dayFilter === "tuesday"
-                  ? "border-purple-500 bg-purple-500/20 text-purple-600 dark:text-purple-400"
-                  : "border-input bg-background text-foreground hover:border-muted-foreground/30"
-              )}
-            >
-              Smack Tuesday
-            </button>
-            <button
-              type="button"
-              onClick={() => updateParams({ dayFilter: dayFilter === "friday" ? "" : "friday" })}
-              className={cn(
-                "flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                dayFilter === "friday"
-                  ? "border-cyan-500 bg-cyan-500/20 text-cyan-600 dark:text-cyan-400"
-                  : "border-input bg-background text-foreground hover:border-muted-foreground/30"
-              )}
-            >
-              Neon Friday
-            </button>
+    <div className="bg-card rounded-xl border border-border/60 shadow-sm p-3">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+        {/* Header - inline with filters on desktop */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-muted flex items-center justify-center">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
+          <span className="text-sm font-semibold text-foreground">Filter & Sort</span>
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
+            >
+              <X className="w-3 h-3" />
+              Clear all
+            </button>
+          )}
         </div>
 
-        {/* Sort */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sort by</label>
-          <select
-            value={sortBy}
-            onChange={(e) => updateParams({ sortBy: e.target.value })}
-            className={cn(
-              "rounded-xl border border-input bg-background px-3 py-2.5 text-sm text-foreground",
-              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
-              "transition-all duration-200",
-              "hover:border-muted-foreground/30"
-            )}
-          >
-            {SORT_OPTIONS.map((s) => (
-              <option key={s.value} value={s.value}>{s.label}</option>
-            ))}
-          </select>
+        {/* Filters - single row, aligned */}
+        <div className="flex flex-wrap items-end gap-4 sm:gap-6 min-w-0">
+          {/* Venue filter */}
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Venue</label>
+            <select
+              value={venue}
+              onChange={(e) => updateParams({ venue: e.target.value })}
+              className={cn(
+                "rounded-lg border border-input bg-background px-2.5 py-1.5 text-sm text-foreground min-w-[120px]",
+                "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
+                "transition-all duration-200",
+                "hover:border-muted-foreground/30"
+              )}
+            >
+              {VENUES.map((v) => (
+                <option key={v.value} value={v.value}>{v.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Day filter buttons */}
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Event day</label>
+            <div className="flex gap-1.5">
+              <button
+                type="button"
+                onClick={() => updateParams({ dayFilter: dayFilter === "tuesday" ? "" : "tuesday" })}
+                className={cn(
+                  "rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-all duration-200",
+                  dayFilter === "tuesday"
+                    ? "border-purple-500 bg-purple-500/20 text-purple-600 dark:text-purple-400"
+                    : "border-input bg-background text-foreground hover:border-muted-foreground/30"
+                )}
+              >
+                Smack Tuesday
+              </button>
+              <button
+                type="button"
+                onClick={() => updateParams({ dayFilter: dayFilter === "friday" ? "" : "friday" })}
+                className={cn(
+                  "rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-all duration-200",
+                  dayFilter === "friday"
+                    ? "border-cyan-500 bg-cyan-500/20 text-cyan-600 dark:text-cyan-400"
+                    : "border-input bg-background text-foreground hover:border-muted-foreground/30"
+                )}
+              >
+                Neon Friday
+              </button>
+            </div>
+          </div>
+
+          {/* Sort */}
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Sort by</label>
+            <select
+              value={sortBy}
+              onChange={(e) => updateParams({ sortBy: e.target.value })}
+              className={cn(
+                "rounded-lg border border-input bg-background px-2.5 py-1.5 text-sm text-foreground min-w-[140px]",
+                "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
+                "transition-all duration-200",
+                "hover:border-muted-foreground/30"
+              )}
+            >
+              {SORT_OPTIONS.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>

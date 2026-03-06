@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, X } from "lucide-react";
 
 const VENUE_IMAGES: Record<string, string> = {
   SMACK: "/smack1.jpeg",
@@ -20,6 +20,7 @@ interface TicketImageProps {
 
 export function TicketImage({ imageUrl, eventName, venue, isSold, canViewImage }: TicketImageProps) {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [imageOverlayUrl, setImageOverlayUrl] = useState<string | null>(null);
 
   const handleSaveImage = async () => {
     setIsDownloading(true);
@@ -65,7 +66,11 @@ export function TicketImage({ imageUrl, eventName, venue, isSold, canViewImage }
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted border border-border">
+      <button
+        type="button"
+        onClick={() => setImageOverlayUrl(imageUrl)}
+        className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted border border-border w-full cursor-pointer hover:opacity-95 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      >
         <Image
           src={imageUrl}
           alt={`${eventName} ticket`}
@@ -75,7 +80,28 @@ export function TicketImage({ imageUrl, eventName, venue, isSold, canViewImage }
           sizes="(max-width: 1024px) 100vw, 60vw"
           unoptimized={imageUrl.startsWith("data:")}
         />
-      </div>
+      </button>
+      {imageOverlayUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+          onClick={() => setImageOverlayUrl(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setImageOverlayUrl(null)}
+            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <img
+            src={imageOverlayUrl}
+            alt="Ticket"
+            className="max-w-full max-h-full object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
       <Button
         onClick={handleSaveImage}
         variant="outline"
